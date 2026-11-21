@@ -18,3 +18,6 @@ venv/
 # Test and tooling caches
 .pytest_cache/
 .mypy_cache/
+
+# Local gallery contains original dataset images
+/evaluation/misclassification_gallery.png

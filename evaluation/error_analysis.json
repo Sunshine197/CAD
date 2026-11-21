@@ -1,0 +1,873 @@
+{
+  "classes": [
+    "cataract",
+    "glaucoma",
+    "normal"
+  ],
+  "class_mapping": {
+    "0": "cataract",
+    "1": "glaucoma",
+    "2": "normal"
+  },
+  "summary": {
+    "total_samples": 584,
+    "correct_predictions": 496,
+    "incorrect_predictions": 88,
+    "overall_error_rate": 0.1506849315068493
+  },
+  "misclassification_counts_by_true_class": {
+    "cataract": 23,
+    "glaucoma": 48,
+    "normal": 17
+  },
+  "most_common_confusion_pairs": [
+    {
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "count": 25
+    },
+    {
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "count": 23
+    },
+    {
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "count": 14
+    },
+    {
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "count": 12
+    },
+    {
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "count": 9
+    },
+    {
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "count": 5
+    }
+  ],
+  "misclassifications": [
+    {
+      "dataset_relative_path": "cataract/_398_8365643.jpg",
+      "filename": "_398_8365643.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.554395318031311,
+      "true_class_confidence": 0.4056767225265503
+    },
+    {
+      "dataset_relative_path": "normal/2991_right.jpg",
+      "filename": "2991_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5461894273757935,
+      "true_class_confidence": 0.35737261176109314
+    },
+    {
+      "dataset_relative_path": "glaucoma/365_left.jpg",
+      "filename": "365_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.832257091999054,
+      "true_class_confidence": 0.165403351187706
+    },
+    {
+      "dataset_relative_path": "glaucoma/_313_8583918.jpg",
+      "filename": "_313_8583918.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6290158629417419,
+      "true_class_confidence": 0.36165568232536316
+    },
+    {
+      "dataset_relative_path": "glaucoma/1301_left.jpg",
+      "filename": "1301_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.5705501437187195,
+      "true_class_confidence": 0.3087827265262604
+    },
+    {
+      "dataset_relative_path": "glaucoma/2048_right.jpg",
+      "filename": "2048_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.5866743326187134,
+      "true_class_confidence": 0.34741127490997314
+    },
+    {
+      "dataset_relative_path": "glaucoma/1450_left.jpg",
+      "filename": "1450_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.885894238948822,
+      "true_class_confidence": 0.10819591581821442
+    },
+    {
+      "dataset_relative_path": "normal/3054_right.jpg",
+      "filename": "3054_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.4169372320175171,
+      "true_class_confidence": 0.36509594321250916
+    },
+    {
+      "dataset_relative_path": "glaucoma/_216_1547406.jpg",
+      "filename": "_216_1547406.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6170246601104736,
+      "true_class_confidence": 0.37586769461631775
+    },
+    {
+      "dataset_relative_path": "cataract/_57_3959793.jpg",
+      "filename": "_57_3959793.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.8144195675849915,
+      "true_class_confidence": 0.18509617447853088
+    },
+    {
+      "dataset_relative_path": "glaucoma/1371_left.jpg",
+      "filename": "1371_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.6901875138282776,
+      "true_class_confidence": 0.3044582009315491
+    },
+    {
+      "dataset_relative_path": "cataract/_211_9288352.jpg",
+      "filename": "_211_9288352.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.7559127807617188,
+      "true_class_confidence": 0.23000583052635193
+    },
+    {
+      "dataset_relative_path": "glaucoma/1345_right.jpg",
+      "filename": "1345_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.991489827632904,
+      "true_class_confidence": 0.008493968285620213
+    },
+    {
+      "dataset_relative_path": "glaucoma/583_right.jpg",
+      "filename": "583_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8924667239189148,
+      "true_class_confidence": 0.10112792998552322
+    },
+    {
+      "dataset_relative_path": "glaucoma/1276_right.jpg",
+      "filename": "1276_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8996444940567017,
+      "true_class_confidence": 0.09981931000947952
+    },
+    {
+      "dataset_relative_path": "cataract/_264_422425.jpg",
+      "filename": "_264_422425.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.500562846660614,
+      "true_class_confidence": 0.4701617956161499
+    },
+    {
+      "dataset_relative_path": "glaucoma/1344_right.jpg",
+      "filename": "1344_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9360430240631104,
+      "true_class_confidence": 0.0636536180973053
+    },
+    {
+      "dataset_relative_path": "cataract/_316_2112344.jpg",
+      "filename": "_316_2112344.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.8090120553970337,
+      "true_class_confidence": 0.17522509396076202
+    },
+    {
+      "dataset_relative_path": "glaucoma/1474_left.jpg",
+      "filename": "1474_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.5689413547515869,
+      "true_class_confidence": 0.42550215125083923
+    },
+    {
+      "dataset_relative_path": "cataract/_274_6913203.jpg",
+      "filename": "_274_6913203.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6021790504455566,
+      "true_class_confidence": 0.383033812046051
+    },
+    {
+      "dataset_relative_path": "cataract/_302_822867.jpg",
+      "filename": "_302_822867.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6385414004325867,
+      "true_class_confidence": 0.3494855761528015
+    },
+    {
+      "dataset_relative_path": "cataract/1454_right.jpg",
+      "filename": "1454_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8599567413330078,
+      "true_class_confidence": 0.04433109611272812
+    },
+    {
+      "dataset_relative_path": "cataract/_301_5387162.jpg",
+      "filename": "_301_5387162.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6401118636131287,
+      "true_class_confidence": 0.3317197561264038
+    },
+    {
+      "dataset_relative_path": "glaucoma/1473_right.jpg",
+      "filename": "1473_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.5753542184829712,
+      "true_class_confidence": 0.2179000824689865
+    },
+    {
+      "dataset_relative_path": "glaucoma/_60_6481590.jpg",
+      "filename": "_60_6481590.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9805441498756409,
+      "true_class_confidence": 0.018501272425055504
+    },
+    {
+      "dataset_relative_path": "normal/2884_left.jpg",
+      "filename": "2884_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5741170644760132,
+      "true_class_confidence": 0.23042716085910797
+    },
+    {
+      "dataset_relative_path": "cataract/_334_6427863.jpg",
+      "filename": "_334_6427863.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6921500563621521,
+      "true_class_confidence": 0.28040310740470886
+    },
+    {
+      "dataset_relative_path": "glaucoma/1498_left.jpg",
+      "filename": "1498_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.778060793876648,
+      "true_class_confidence": 0.22131618857383728
+    },
+    {
+      "dataset_relative_path": "glaucoma/247_right.jpg",
+      "filename": "247_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8991127014160156,
+      "true_class_confidence": 0.09877170622348785
+    },
+    {
+      "dataset_relative_path": "glaucoma/1266_right.jpg",
+      "filename": "1266_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8642287850379944,
+      "true_class_confidence": 0.13276395201683044
+    },
+    {
+      "dataset_relative_path": "glaucoma/1515_left.jpg",
+      "filename": "1515_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.900551438331604,
+      "true_class_confidence": 0.0651840791106224
+    },
+    {
+      "dataset_relative_path": "glaucoma/1470_right.jpg",
+      "filename": "1470_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.954498827457428,
+      "true_class_confidence": 0.044603828340768814
+    },
+    {
+      "dataset_relative_path": "glaucoma/1428_left.jpg",
+      "filename": "1428_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.7905398607254028,
+      "true_class_confidence": 0.1192428469657898
+    },
+    {
+      "dataset_relative_path": "glaucoma/1287_left.jpg",
+      "filename": "1287_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.7768446803092957,
+      "true_class_confidence": 0.1998726725578308
+    },
+    {
+      "dataset_relative_path": "glaucoma/_98_4213035.jpg",
+      "filename": "_98_4213035.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9899815917015076,
+      "true_class_confidence": 0.008996334858238697
+    },
+    {
+      "dataset_relative_path": "glaucoma/_332_7068969.jpg",
+      "filename": "_332_7068969.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.4888675808906555,
+      "true_class_confidence": 0.4855782985687256
+    },
+    {
+      "dataset_relative_path": "glaucoma/_107_7535300.jpg",
+      "filename": "_107_7535300.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6618613600730896,
+      "true_class_confidence": 0.3305559456348419
+    },
+    {
+      "dataset_relative_path": "glaucoma/1469_right.jpg",
+      "filename": "1469_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9118489027023315,
+      "true_class_confidence": 0.0828172042965889
+    },
+    {
+      "dataset_relative_path": "glaucoma/1281_right.jpg",
+      "filename": "1281_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.6369454264640808,
+      "true_class_confidence": 0.31317585706710815
+    },
+    {
+      "dataset_relative_path": "cataract/2239_right.jpg",
+      "filename": "2239_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.6598398089408875,
+      "true_class_confidence": 0.15145619213581085
+    },
+    {
+      "dataset_relative_path": "cataract/1452_left.jpg",
+      "filename": "1452_left.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.6807287335395813,
+      "true_class_confidence": 0.1467655450105667
+    },
+    {
+      "dataset_relative_path": "normal/2835_right.jpg",
+      "filename": "2835_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.9515582323074341,
+      "true_class_confidence": 0.03950931876897812
+    },
+    {
+      "dataset_relative_path": "cataract/_86_4443360.jpg",
+      "filename": "_86_4443360.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5996135473251343,
+      "true_class_confidence": 0.33906376361846924
+    },
+    {
+      "dataset_relative_path": "normal/3042_left.jpg",
+      "filename": "3042_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6880465149879456,
+      "true_class_confidence": 0.09355650842189789
+    },
+    {
+      "dataset_relative_path": "glaucoma/_197_5727246.jpg",
+      "filename": "_197_5727246.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6936145424842834,
+      "true_class_confidence": 0.2957554757595062
+    },
+    {
+      "dataset_relative_path": "glaucoma/_311_7054330.jpg",
+      "filename": "_311_7054330.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6934247612953186,
+      "true_class_confidence": 0.30228596925735474
+    },
+    {
+      "dataset_relative_path": "glaucoma/_107_1720806.jpg",
+      "filename": "_107_1720806.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.7009671330451965,
+      "true_class_confidence": 0.29107585549354553
+    },
+    {
+      "dataset_relative_path": "cataract/1167_right.jpg",
+      "filename": "1167_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8820757269859314,
+      "true_class_confidence": 0.028241148218512535
+    },
+    {
+      "dataset_relative_path": "glaucoma/1234_right.jpg",
+      "filename": "1234_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8940627574920654,
+      "true_class_confidence": 0.10448533296585083
+    },
+    {
+      "dataset_relative_path": "normal/2732_left.jpg",
+      "filename": "2732_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5361052751541138,
+      "true_class_confidence": 0.4628623127937317
+    },
+    {
+      "dataset_relative_path": "normal/2763_left.jpg",
+      "filename": "2763_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5466336607933044,
+      "true_class_confidence": 0.44420406222343445
+    },
+    {
+      "dataset_relative_path": "glaucoma/1334_left.jpg",
+      "filename": "1334_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.6197197437286377,
+      "true_class_confidence": 0.3733042776584625
+    },
+    {
+      "dataset_relative_path": "normal/3320_right.jpg",
+      "filename": "3320_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.8032108545303345,
+      "true_class_confidence": 0.1842156946659088
+    },
+    {
+      "dataset_relative_path": "cataract/2140_right.jpg",
+      "filename": "2140_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9884973764419556,
+      "true_class_confidence": 0.0002726386010181159
+    },
+    {
+      "dataset_relative_path": "glaucoma/1210_right.jpg",
+      "filename": "1210_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.4840482175350189,
+      "true_class_confidence": 0.3608126640319824
+    },
+    {
+      "dataset_relative_path": "glaucoma/_80_1430822.jpg",
+      "filename": "_80_1430822.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9802324771881104,
+      "true_class_confidence": 0.015773199498653412
+    },
+    {
+      "dataset_relative_path": "normal/2634_left.jpg",
+      "filename": "2634_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6909583806991577,
+      "true_class_confidence": 0.08047526329755783
+    },
+    {
+      "dataset_relative_path": "cataract/_298_9693365.jpg",
+      "filename": "_298_9693365.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5162738561630249,
+      "true_class_confidence": 0.47606343030929565
+    },
+    {
+      "dataset_relative_path": "normal/3305_right.jpg",
+      "filename": "3305_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.9946893453598022,
+      "true_class_confidence": 0.002856727922335267
+    },
+    {
+      "dataset_relative_path": "glaucoma/1482_left.jpg",
+      "filename": "1482_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.8074884414672852,
+      "true_class_confidence": 0.18892844021320343
+    },
+    {
+      "dataset_relative_path": "cataract/1994_left.jpg",
+      "filename": "1994_left.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.4546363353729248,
+      "true_class_confidence": 0.23698145151138306
+    },
+    {
+      "dataset_relative_path": "glaucoma/1225_left.jpg",
+      "filename": "1225_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.5499378442764282,
+      "true_class_confidence": 0.3413121700286865
+    },
+    {
+      "dataset_relative_path": "glaucoma/_28_7928893.jpg",
+      "filename": "_28_7928893.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6306700706481934,
+      "true_class_confidence": 0.35703739523887634
+    },
+    {
+      "dataset_relative_path": "glaucoma/_123_6574789.jpg",
+      "filename": "_123_6574789.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9034549593925476,
+      "true_class_confidence": 0.09141036868095398
+    },
+    {
+      "dataset_relative_path": "glaucoma/1291_right.jpg",
+      "filename": "1291_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.5138223171234131,
+      "true_class_confidence": 0.4541946351528168
+    },
+    {
+      "dataset_relative_path": "cataract/_199_2279189.jpg",
+      "filename": "_199_2279189.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6410263776779175,
+      "true_class_confidence": 0.32504090666770935
+    },
+    {
+      "dataset_relative_path": "glaucoma/1389_right.jpg",
+      "filename": "1389_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.910774827003479,
+      "true_class_confidence": 0.08833717554807663
+    },
+    {
+      "dataset_relative_path": "normal/3051_right.jpg",
+      "filename": "3051_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.4807150363922119,
+      "true_class_confidence": 0.40482038259506226
+    },
+    {
+      "dataset_relative_path": "cataract/2052_right.jpg",
+      "filename": "2052_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.6459856629371643,
+      "true_class_confidence": 0.011224214918911457
+    },
+    {
+      "dataset_relative_path": "glaucoma/1426_left.jpg",
+      "filename": "1426_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9283673167228699,
+      "true_class_confidence": 0.0645948052406311
+    },
+    {
+      "dataset_relative_path": "cataract/_393_746807.jpg",
+      "filename": "_393_746807.jpg",
+      "true_class": "cataract",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.994460940361023,
+      "true_class_confidence": 0.004747133702039719
+    },
+    {
+      "dataset_relative_path": "glaucoma/1477_left.jpg",
+      "filename": "1477_left.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9253311157226562,
+      "true_class_confidence": 0.0652649849653244
+    },
+    {
+      "dataset_relative_path": "normal/3324_right.jpg",
+      "filename": "3324_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.5152242183685303,
+      "true_class_confidence": 0.4379758834838867
+    },
+    {
+      "dataset_relative_path": "normal/2935_left.jpg",
+      "filename": "2935_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9974939823150635,
+      "true_class_confidence": 0.0014077064115554094
+    },
+    {
+      "dataset_relative_path": "cataract/611_left.jpg",
+      "filename": "611_left.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.9424548745155334,
+      "true_class_confidence": 0.008509799838066101
+    },
+    {
+      "dataset_relative_path": "glaucoma/1314_right.jpg",
+      "filename": "1314_right.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.38848644495010376,
+      "true_class_confidence": 0.3869999051094055
+    },
+    {
+      "dataset_relative_path": "normal/2841_left.jpg",
+      "filename": "2841_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.7511851191520691,
+      "true_class_confidence": 0.24709154665470123
+    },
+    {
+      "dataset_relative_path": "glaucoma/_169_5017005.jpg",
+      "filename": "_169_5017005.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.7850987911224365,
+      "true_class_confidence": 0.2040501981973648
+    },
+    {
+      "dataset_relative_path": "glaucoma/_300_7433746.jpg",
+      "filename": "_300_7433746.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9718705415725708,
+      "true_class_confidence": 0.020743798464536667
+    },
+    {
+      "dataset_relative_path": "glaucoma/_10_2555943.jpg",
+      "filename": "_10_2555943.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.7103108167648315,
+      "true_class_confidence": 0.28282609581947327
+    },
+    {
+      "dataset_relative_path": "glaucoma/_60_3287251.jpg",
+      "filename": "_60_3287251.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9389835596084595,
+      "true_class_confidence": 0.05974334105849266
+    },
+    {
+      "dataset_relative_path": "normal/3113_left.jpg",
+      "filename": "3113_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.9331366419792175,
+      "true_class_confidence": 0.03821625933051109
+    },
+    {
+      "dataset_relative_path": "cataract/119_left.jpg",
+      "filename": "119_left.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.4960927665233612,
+      "true_class_confidence": 0.20143896341323853
+    },
+    {
+      "dataset_relative_path": "normal/2570_left.jpg",
+      "filename": "2570_left.jpg",
+      "true_class": "normal",
+      "predicted_class": "glaucoma",
+      "prediction_confidence": 0.8405103087425232,
+      "true_class_confidence": 0.136692076921463
+    },
+    {
+      "dataset_relative_path": "cataract/2074_right.jpg",
+      "filename": "2074_right.jpg",
+      "true_class": "cataract",
+      "predicted_class": "normal",
+      "prediction_confidence": 0.5436542630195618,
+      "true_class_confidence": 0.26715192198753357
+    },
+    {
+      "dataset_relative_path": "glaucoma/_192_1534346.jpg",
+      "filename": "_192_1534346.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6797223091125488,
+      "true_class_confidence": 0.3091580867767334
+    },
+    {
+      "dataset_relative_path": "glaucoma/_185_7833633.jpg",
+      "filename": "_185_7833633.jpg",
+      "true_class": "glaucoma",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6775063276290894,
+      "true_class_confidence": 0.30478712916374207
+    },
+    {
+      "dataset_relative_path": "normal/2332_right.jpg",
+      "filename": "2332_right.jpg",
+      "true_class": "normal",
+      "predicted_class": "cataract",
+      "prediction_confidence": 0.6280196309089661,
+      "true_class_confidence": 0.19579719007015228
+    }
+  ],
+  "confidence_statistics": {
+    "score_type": "Predicted-class softmax output; not calibrated probability.",
+    "correct": {
+      "count": 496,
+      "mean": 0.9108931669785131,
+      "median": 0.9684886336326599,
+      "std_dev": 0.12636428368235325,
+      "min": 0.39737898111343384,
+      "max": 0.9999992847442627
+    },
+    "incorrect": {
+      "count": 88,
+      "mean": 0.7330072474750605,
+      "median": 0.693519651889801,
+      "std_dev": 0.16926180343647168,
+      "min": 0.38848644495010376,
+      "max": 0.9974939823150635
+    },
+    "histogram": {
+      "bin_edges": [
+        0.0,
+        0.1,
+        0.2,
+        0.30000000000000004,
+        0.4,
+        0.5,
+        0.6000000000000001,
+        0.7000000000000001,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "correct_fraction_by_bin": [
+        0.0,
+        0.0,
+        0.0,
+        0.0020161290322580645,
+        0.008064516129032258,
+        0.04435483870967742,
+        0.034274193548387094,
+        0.06048387096774194,
+        0.12701612903225806,
+        0.7237903225806451
+      ],
+      "incorrect_fraction_by_bin": [
+        0.0,
+        0.0,
+        0.0,
+        0.011363636363636364,
+        0.06818181818181818,
+        0.18181818181818182,
+        0.25,
+        0.09090909090909091,
+        0.1590909090909091,
+        0.23863636363636365
+      ]
+    }
+  },
+  "confidence_interpretation": "Confidence values are model softmax outputs, not calibrated probabilities. A high score is not proof that a prediction is correct, and these distributions do not establish clinical reliability.",
+  "split": {
+    "random_state": 42,
+    "stratified": true,
+    "first_split_test_size": 0.2,
+    "second_split_validation_size": 0.25,
+    "included_extension": ".jpg",
+    "excluded_classes": [
+      "diabetic_retinopathy"
+    ],
+    "exact_original_test_membership_confirmed": false,
+    "membership_limitation": "The notebook did not save its ordered image list or test indices. For a ZIP source, the split uses archive member order, which cannot be proven identical to the original Kaggle filesystem glob order.",
+    "image_ordering": "ZIP central-directory order within sorted class names",
+    "test_class_counts": {
+      "cataract": 188,
+      "glaucoma": 181,
+      "normal": 215
+    }
+  },
+  "reproducibility": {
+    "dataset_archive_sha256": "a7c248c9f097e325b6b0ea3edb97b59a43c2119e1716cf6469dda1305db7e029",
+    "dataset_size_bytes": 702829419,
+    "checkpoint_sha256": "f7af75bcfb97b24c42d0eb5fea9b8e3df387d61376e0c0e5fa018e50caa3f12e",
+    "checkpoint_size_bytes": 96471113,
+    "ordered_dataset_member_list_sha256": "cfe75c73963460b691cc70d70837a78563fd15322fdbb0c0c69dfcdf829b959d",
+    "ordered_dataset_member_count": 2918,
+    "preprocessing": {
+      "color_mode": "RGB",
+      "resize_size": [
+        224,
+        224
+      ],
+      "tensor_conversion": "torchvision.transforms.ToTensor",
+      "normalization_mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "normalization_std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    },
+    "software_versions": {
+      "python": "3.12.10",
+      "pytorch": "2.5.1+cu121",
+      "torchvision": "0.20.1+cu121",
+      "numpy": "2.4.4",
+      "scikit_learn": "1.8.0",
+      "pillow": "12.2.0"
+    },
+    "inference_device": "cuda"
+  }
+}
