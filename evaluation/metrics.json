@@ -1,0 +1,141 @@
+{
+  "classes": [
+    "cataract",
+    "glaucoma",
+    "normal"
+  ],
+  "class_mapping": {
+    "0": "cataract",
+    "1": "glaucoma",
+    "2": "normal"
+  },
+  "checkpoint": "best_eye_disease_model.pth",
+  "dataset": "dataset without diabetic.zip",
+  "reproducibility": {
+    "dataset_archive_sha256": "a7c248c9f097e325b6b0ea3edb97b59a43c2119e1716cf6469dda1305db7e029",
+    "dataset_size_bytes": 702829419,
+    "checkpoint_sha256": "f7af75bcfb97b24c42d0eb5fea9b8e3df387d61376e0c0e5fa018e50caa3f12e",
+    "checkpoint_size_bytes": 96471113,
+    "ordered_dataset_member_list_sha256": "cfe75c73963460b691cc70d70837a78563fd15322fdbb0c0c69dfcdf829b959d",
+    "ordered_dataset_member_count": 2918,
+    "preprocessing": {
+      "color_mode": "RGB",
+      "resize_size": [
+        224,
+        224
+      ],
+      "tensor_conversion": "torchvision.transforms.ToTensor",
+      "normalization_mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "normalization_std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    },
+    "software_versions": {
+      "python": "3.12.10",
+      "pytorch": "2.5.1+cu121",
+      "torchvision": "0.20.1+cu121",
+      "numpy": "2.4.4",
+      "scikit_learn": "1.8.0",
+      "pillow": "12.2.0"
+    },
+    "inference_device": "cuda"
+  },
+  "split": {
+    "random_state": 42,
+    "stratified": true,
+    "first_split_test_size": 0.2,
+    "second_split_validation_size": 0.25,
+    "included_extension": ".jpg",
+    "excluded_classes": [
+      "diabetic_retinopathy"
+    ],
+    "image_ordering": "ZIP central-directory order within sorted class names",
+    "class_counts": {
+      "train": {
+        "cataract": 562,
+        "glaucoma": 544,
+        "normal": 644
+      },
+      "validation": {
+        "cataract": 188,
+        "glaucoma": 181,
+        "normal": 215
+      },
+      "test": {
+        "cataract": 188,
+        "glaucoma": 181,
+        "normal": 215
+      }
+    },
+    "test_class_counts": {
+      "cataract": 188,
+      "glaucoma": 181,
+      "normal": 215
+    },
+    "exact_original_test_membership_confirmed": false,
+    "membership_limitation": "The notebook did not save its ordered image list or test indices. For a ZIP source, the split uses archive member order, which cannot be proven identical to the original Kaggle filesystem glob order."
+  },
+  "metrics": {
+    "sample_count": 584,
+    "accuracy": 0.8493150684931506,
+    "test_loss": 0.4015464209283998,
+    "per_class": {
+      "cataract": {
+        "precision": 0.8549222797927462,
+        "recall": 0.8776595744680851,
+        "f1": 0.8661417322834646,
+        "support": 188,
+        "sensitivity": 0.8776595744680851,
+        "specificity": 0.9292929292929293
+      },
+      "glaucoma": {
+        "precision": 0.8364779874213837,
+        "recall": 0.7348066298342542,
+        "f1": 0.7823529411764706,
+        "support": 181,
+        "sensitivity": 0.7348066298342542,
+        "specificity": 0.9354838709677419
+      },
+      "normal": {
+        "precision": 0.853448275862069,
+        "recall": 0.9209302325581395,
+        "f1": 0.8859060402684564,
+        "support": 215,
+        "sensitivity": 0.9209302325581395,
+        "specificity": 0.907859078590786
+      }
+    },
+    "macro_f1": 0.8448002379094639,
+    "weighted_f1": 0.8474491895204636,
+    "roc_auc_ovr": {
+      "cataract": 0.9691596819256394,
+      "glaucoma": 0.9293832170324774,
+      "normal": 0.9625133925757862
+    },
+    "confusion_matrix": [
+      [
+        165,
+        14,
+        9
+      ],
+      [
+        23,
+        133,
+        25
+      ],
+      [
+        5,
+        12,
+        198
+      ]
+    ]
+  },
+  "test_loss_method": "Mean per-sample torch.nn.functional.cross_entropy computed directly from the predictor's original model logits.",
+  "score_note": "Scores are model softmax outputs and are not clinically calibrated probabilities. This evaluation is not clinical validation."
+}

@@ -10,6 +10,9 @@ from .model import EyeClassificationModel
 
 CLASS_NAMES = ("cataract", "glaucoma", "normal")
 CLASS_MAPPING = {index: name for index, name in enumerate(CLASS_NAMES)}
+EVAL_IMAGE_SIZE = (224, 224)
+EVAL_NORMALIZATION_MEAN = (0.485, 0.456, 0.406)
+EVAL_NORMALIZATION_STD = (0.229, 0.224, 0.225)
 
 
 class PredictorError(Exception):
@@ -51,11 +54,11 @@ class EyeDiseasePredictor:
 
         self.eval_transforms = transforms.Compose(
             [
-                transforms.Resize((224, 224)),
+                transforms.Resize(EVAL_IMAGE_SIZE),
                 transforms.ToTensor(),
                 transforms.Normalize(
-                    mean=[0.485, 0.456, 0.406],
-                    std=[0.229, 0.224, 0.225],
+                    mean=EVAL_NORMALIZATION_MEAN,
+                    std=EVAL_NORMALIZATION_STD,
                 ),
             ]
         )
@@ -102,13 +105,17 @@ class EyeDiseasePredictor:
 
         return self.eval_transforms(rgb_image)
 
-    def predict(self, image_path: Union[str, Path]) -> Dict[str, object]:
-        """Return the predicted class and softmax scores for all three classes."""
+    def _predict_logits(self, image_path: Union[str, Path]) -> torch.Tensor:
+        """Return one image's logits for internal evaluation use."""
         image_tensor = self.preprocess(image_path).unsqueeze(0).to(self.device)
 
         with torch.no_grad():
-            logits = self.model(image_tensor)
-            scores = torch.softmax(logits, dim=1)[0].detach().cpu()
+            return self.model(image_tensor)
+
+    def predict(self, image_path: Union[str, Path]) -> Dict[str, object]:
+        """Return the predicted class and softmax scores for all three classes."""
+        logits = self._predict_logits(image_path)
+        scores = torch.softmax(logits, dim=1)[0].detach().cpu()
 
         predicted_index = int(torch.argmax(scores).item())
         score_map = {

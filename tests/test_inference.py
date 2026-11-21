@@ -64,6 +64,8 @@ class EyeDiseaseInferenceTests(unittest.TestCase):
         predictor = EyeDiseasePredictor(CHECKPOINT_PATH, device="cpu")
         result = predictor.predict(image_path)
 
+        self.assertIsInstance(result, dict)
+        self.assertEqual(set(result), {"predicted_class", "scores"})
         self.assertIn(
             result["predicted_class"],
             ("cataract", "glaucoma", "normal"),
@@ -76,6 +78,7 @@ class EyeDiseaseInferenceTests(unittest.TestCase):
         self.assertTrue(
             all(0.0 <= score <= 1.0 for score in result["scores"].values())
         )
+        self.assertTrue(all(isinstance(score, float) for score in result["scores"].values()))
 
     def test_missing_checkpoint_has_clear_error(self):
         missing = self.temp_path / "missing.pth"
