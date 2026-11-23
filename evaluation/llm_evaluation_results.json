@@ -6,8 +6,8 @@
   "benchmark_case_count": 34,
   "valid_case_count": 30,
   "invalid_case_count": 4,
-  "completed_case_count": 3,
-  "pending_valid_case_count": 27,
+  "completed_case_count": 30,
+  "pending_valid_case_count": 0,
   "model": {
     "model": "medgemma1.5:4b",
     "digest": "433252621ab154668b5d8be6aff6c1b771bacba045e46e6193da8d6ad1630f2c"
@@ -19,46 +19,91 @@
   },
   "automatic_text_metrics": {
     "bleu_corpus": {
-      "BLEU-1": 0.46715328467153283,
-      "BLEU-2": 0.2769418854762623,
-      "BLEU-3": 0.19152659153234688,
-      "BLEU-4": 0.12172627027941615
+      "BLEU-1": 0.5036818851251841,
+      "BLEU-2": 0.2979113551740456,
+      "BLEU-3": 0.17765240506393468,
+      "BLEU-4": 0.09697415501218117
     },
     "rouge_macro_average": {
-      "ROUGE-1": 0.43022088353413657,
-      "ROUGE-2": 0.1081081081081081,
-      "ROUGE-L": 0.32429718875502006
+      "ROUGE-1": 0.47627374387648774,
+      "ROUGE-2": 0.15979771339812415,
+      "ROUGE-L": 0.347012629540837
     },
     "rouge_case_aggregation": "max F1 over references per case, then macro-average cases",
     "bleu_method": "Corpus modified n-gram precision with multiple references, closest reference length, brevity penalty, exponential smoothing, and local Unicode word tokenization.",
     "rouge_method": "ROUGE-1/2/L F1, maximum per case over references, then unweighted macro-average."
   },
+  "response_validation": {
+    "response_count": 30,
+    "passed_count": 0,
+    "sentence_count_failure_case_ids": [
+      "cat_dom_01",
+      "cat_dom_02",
+      "cat_dom_03",
+      "cat_dom_04",
+      "glc_dom_01",
+      "glc_dom_02",
+      "glc_dom_03",
+      "glc_dom_04",
+      "norm_dom_01",
+      "norm_dom_02",
+      "norm_dom_03",
+      "norm_dom_04",
+      "cat_close_01",
+      "cat_close_02",
+      "cat_close_03",
+      "glc_close_01",
+      "glc_close_02",
+      "glc_close_03",
+      "norm_close_01",
+      "norm_close_02",
+      "norm_close_03",
+      "dist_01",
+      "dist_02",
+      "dist_03",
+      "contra_01",
+      "contra_02",
+      "contra_03",
+      "contra_04",
+      "contra_05",
+      "contra_06"
+    ],
+    "missing_uncalibrated_statement_case_ids": [
+      "cat_dom_03",
+      "cat_close_02",
+      "norm_close_01",
+      "norm_close_03",
+      "contra_01",
+      "contra_06"
+    ],
+    "prohibited_score_description_case_ids": []
+  },
   "generation_performance": {
-    "response_count": 3,
-    "mean_response_duration_seconds": 3.9653652666602284,
-    "median_response_duration_seconds": 3.9442451000213623,
-    "prompt_eval_count_sum": 1311,
-    "prompt_eval_count_mean": 437,
-    "eval_count_sum": 193,
-    "eval_count_mean": 64.33333333333333,
-    "prompt_eval_count_observations": 3,
-    "eval_count_observations": 3,
+    "response_count": 30,
+    "mean_response_duration_seconds": 4.1878508066758515,
+    "median_response_duration_seconds": 4.181060049973894,
+    "prompt_eval_count_sum": 13152,
+    "prompt_eval_count_mean": 438.4,
+    "eval_count_sum": 1998,
+    "eval_count_mean": 66.6,
+    "prompt_eval_count_observations": 30,
+    "eval_count_observations": 30,
     "ollama_durations_seconds": {
       "total_duration": {
-        "observations": 3,
-        "mean": 1.9107892666666666
+        "observations": 30,
+        "mean": 2.1363016366666665
       },
       "load_duration": {
-        "observations": 3,
-        "mean": 0.008457433333333333
+        "observations": 30,
+        "mean": 0.13343666666666665
       },
       "prompt_eval_duration": {
-        "observations": 3,
-        "mean": 0.31720633333333337
+        "observations": 30,
+        "mean": 0.38258563333333334
       },
       "eval_duration": {
-        "observations": 3,
-        "mean": 1.5588863333333334
+        "observations": 30,
+        "mean": 1.6089816666666668
       }
     }
   },
@@ -104,6 +149,16 @@
         "ROUGE-2": 0.16216216216216214,
         "ROUGE-L": 0.3614457831325301
       },
+      "response_validation": {
+        "sentence_count": 5,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
       "model": "medgemma1.5:4b",
       "generation_metadata": {
         "eval_count": 70,
@@ -134,6 +189,16 @@
         "ROUGE-1": 0.45783132530120485,
         "ROUGE-2": 0.16216216216216214,
         "ROUGE-L": 0.3614457831325301
+      },
+      "response_validation": {
+        "sentence_count": 5,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
       },
       "model": "medgemma1.5:4b",
       "generation_metadata": {
@@ -166,6 +231,17 @@
         "ROUGE-2": 0.0,
         "ROUGE-L": 0.25
       },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
       "model": "medgemma1.5:4b",
       "generation_metadata": {
         "eval_count": 53,
@@ -189,165 +265,1115 @@
     },
     {
       "case_id": "cat_dom_04",
+      "status": "completed",
       "scenario": "dominant_cataract",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.6233766233766234,
+        "ROUGE-2": 0.42666666666666664,
+        "ROUGE-L": 0.5714285714285714
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 7.821438999962993,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 74,
+        "total_duration_nanoseconds": 5761199800,
+        "total_duration_seconds": 5.7611998,
+        "load_duration_nanoseconds": 3710362600,
+        "load_duration_seconds": 3.7103626,
+        "prompt_eval_duration_nanoseconds": 259829000,
+        "prompt_eval_duration_seconds": 0.259829,
+        "eval_duration_nanoseconds": 1781374000,
+        "eval_duration_seconds": 1.781374
+      }
     },
     {
       "case_id": "glc_dom_01",
+      "status": "completed",
       "scenario": "dominant_glaucoma",
       "equivalence_group": "glc_equiv_a",
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5797101449275361,
+        "ROUGE-2": 0.2191780821917808,
+        "ROUGE-L": 0.4
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.0843777999980375,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 69,
+        "total_duration_nanoseconds": 2013660800,
+        "total_duration_seconds": 2.0136608,
+        "load_duration_nanoseconds": 11005200,
+        "load_duration_seconds": 0.0110052,
+        "prompt_eval_duration_nanoseconds": 334569000,
+        "prompt_eval_duration_seconds": 0.334569,
+        "eval_duration_nanoseconds": 1656782000,
+        "eval_duration_seconds": 1.656782
+      }
     },
     {
       "case_id": "glc_dom_02",
+      "status": "completed",
       "scenario": "dominant_glaucoma",
       "equivalence_group": "glc_equiv_a",
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5797101449275361,
+        "ROUGE-2": 0.2191780821917808,
+        "ROUGE-L": 0.4
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.9438306000083685,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 69,
+        "total_duration_nanoseconds": 1894973900,
+        "total_duration_seconds": 1.8949739,
+        "load_duration_nanoseconds": 10367300,
+        "load_duration_seconds": 0.0103673,
+        "prompt_eval_duration_nanoseconds": 181041000,
+        "prompt_eval_duration_seconds": 0.181041,
+        "eval_duration_nanoseconds": 1694256000,
+        "eval_duration_seconds": 1.694256
+      }
     },
     {
       "case_id": "glc_dom_03",
+      "status": "completed",
       "scenario": "dominant_glaucoma",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5277777777777778,
+        "ROUGE-2": 0.14285714285714285,
+        "ROUGE-L": 0.3333333333333333
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.182365999906324,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2128066400,
+        "total_duration_seconds": 2.1280664,
+        "load_duration_nanoseconds": 9691900,
+        "load_duration_seconds": 0.0096919,
+        "prompt_eval_duration_nanoseconds": 422339000,
+        "prompt_eval_duration_seconds": 0.422339,
+        "eval_duration_nanoseconds": 1686770000,
+        "eval_duration_seconds": 1.68677
+      }
     },
     {
       "case_id": "glc_dom_04",
+      "status": "completed",
       "scenario": "dominant_glaucoma",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.6301369863013698,
+        "ROUGE-2": 0.1971830985915493,
+        "ROUGE-L": 0.4657534246575342
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.19107579998672,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2152228900,
+        "total_duration_seconds": 2.1522289,
+        "load_duration_nanoseconds": 10865900,
+        "load_duration_seconds": 0.0108659,
+        "prompt_eval_duration_nanoseconds": 437091000,
+        "prompt_eval_duration_seconds": 0.437091,
+        "eval_duration_nanoseconds": 1693783000,
+        "eval_duration_seconds": 1.693783
+      }
     },
     {
       "case_id": "norm_dom_01",
+      "status": "completed",
       "scenario": "dominant_normal",
       "equivalence_group": "normal_equiv_a",
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5352112676056338,
+        "ROUGE-2": 0.17391304347826086,
+        "ROUGE-L": 0.3421052631578947
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.20515300007537,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2139824900,
+        "total_duration_seconds": 2.1398249,
+        "load_duration_nanoseconds": 9037900,
+        "load_duration_seconds": 0.0090379,
+        "prompt_eval_duration_nanoseconds": 432174000,
+        "prompt_eval_duration_seconds": 0.432174,
+        "eval_duration_nanoseconds": 1689848000,
+        "eval_duration_seconds": 1.689848
+      }
     },
     {
       "case_id": "norm_dom_02",
+      "status": "completed",
       "scenario": "dominant_normal",
       "equivalence_group": "normal_equiv_a",
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5352112676056338,
+        "ROUGE-2": 0.17391304347826086,
+        "ROUGE-L": 0.3421052631578947
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.9816778000677004,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 1914483500,
+        "total_duration_seconds": 1.9144835,
+        "load_duration_nanoseconds": 9646800,
+        "load_duration_seconds": 0.0096468,
+        "prompt_eval_duration_nanoseconds": 145999000,
+        "prompt_eval_duration_seconds": 0.145999,
+        "eval_duration_nanoseconds": 1750331000,
+        "eval_duration_seconds": 1.750331
+      }
     },
     {
       "case_id": "norm_dom_03",
+      "status": "completed",
       "scenario": "dominant_normal",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5675675675675675,
+        "ROUGE-2": 0.16666666666666666,
+        "ROUGE-L": 0.3783783783783784
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.2391370999393985,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 71,
+        "total_duration_nanoseconds": 2169867800,
+        "total_duration_seconds": 2.1698678,
+        "load_duration_nanoseconds": 9849900,
+        "load_duration_seconds": 0.0098499,
+        "prompt_eval_duration_nanoseconds": 433230000,
+        "prompt_eval_duration_seconds": 0.43323,
+        "eval_duration_nanoseconds": 1717994000,
+        "eval_duration_seconds": 1.717994
+      }
     },
     {
       "case_id": "norm_dom_04",
+      "status": "completed",
       "scenario": "dominant_normal",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5866666666666666,
+        "ROUGE-2": 0.2191780821917808,
+        "ROUGE-L": 0.45333333333333337
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.179984299931675,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2098257400,
+        "total_duration_seconds": 2.0982574,
+        "load_duration_nanoseconds": 5656000,
+        "load_duration_seconds": 0.005656,
+        "prompt_eval_duration_nanoseconds": 391882000,
+        "prompt_eval_duration_seconds": 0.391882,
+        "eval_duration_nanoseconds": 1691461000,
+        "eval_duration_seconds": 1.691461
+      }
     },
     {
       "case_id": "cat_close_01",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.40506329113924044,
+        "ROUGE-2": 0.1791044776119403,
+        "ROUGE-L": 0.31884057971014496
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.268864699988626,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 74,
+        "total_duration_nanoseconds": 2247158900,
+        "total_duration_seconds": 2.2471589,
+        "load_duration_nanoseconds": 11515000,
+        "load_duration_seconds": 0.011515,
+        "prompt_eval_duration_nanoseconds": 430495000,
+        "prompt_eval_duration_seconds": 0.430495,
+        "eval_duration_nanoseconds": 1794746000,
+        "eval_duration_seconds": 1.794746
+      }
     },
     {
       "case_id": "cat_close_02",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5079365079365079,
+        "ROUGE-2": 0.14285714285714285,
+        "ROUGE-L": 0.31746031746031744
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.7484508000779897,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 54,
+        "total_duration_nanoseconds": 1705523700,
+        "total_duration_seconds": 1.7055237,
+        "load_duration_nanoseconds": 10039300,
+        "load_duration_seconds": 0.0100393,
+        "prompt_eval_duration_nanoseconds": 390061000,
+        "prompt_eval_duration_seconds": 0.390061,
+        "eval_duration_nanoseconds": 1297679000,
+        "eval_duration_seconds": 1.297679
+      }
     },
     {
       "case_id": "cat_close_03",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4533333333333334,
+        "ROUGE-2": 0.1643835616438356,
+        "ROUGE-L": 0.29333333333333333
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.272627600003034,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 74,
+        "total_duration_nanoseconds": 2232423300,
+        "total_duration_seconds": 2.2324233,
+        "load_duration_nanoseconds": 9760500,
+        "load_duration_seconds": 0.0097605,
+        "prompt_eval_duration_nanoseconds": 420177000,
+        "prompt_eval_duration_seconds": 0.420177,
+        "eval_duration_nanoseconds": 1793125000,
+        "eval_duration_seconds": 1.793125
+      }
     },
     {
       "case_id": "glc_close_01",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4722222222222222,
+        "ROUGE-2": 0.22857142857142854,
+        "ROUGE-L": 0.36111111111111105
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.209655600017868,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2162957000,
+        "total_duration_seconds": 2.162957,
+        "load_duration_nanoseconds": 9873800,
+        "load_duration_seconds": 0.0098738,
+        "prompt_eval_duration_nanoseconds": 458500000,
+        "prompt_eval_duration_seconds": 0.4585,
+        "eval_duration_nanoseconds": 1686482000,
+        "eval_duration_seconds": 1.686482
+      }
     },
     {
       "case_id": "glc_close_02",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4594594594594595,
+        "ROUGE-2": 0.2222222222222222,
+        "ROUGE-L": 0.37837837837837834
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.2228037000168115,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2165784000,
+        "total_duration_seconds": 2.165784,
+        "load_duration_nanoseconds": 12029800,
+        "load_duration_seconds": 0.0120298,
+        "prompt_eval_duration_nanoseconds": 457004000,
+        "prompt_eval_duration_seconds": 0.457004,
+        "eval_duration_nanoseconds": 1688147000,
+        "eval_duration_seconds": 1.688147
+      }
     },
     {
       "case_id": "glc_close_03",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4722222222222222,
+        "ROUGE-2": 0.11428571428571427,
+        "ROUGE-L": 0.27777777777777785
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.227430500090122,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2165550500,
+        "total_duration_seconds": 2.1655505,
+        "load_duration_nanoseconds": 11703100,
+        "load_duration_seconds": 0.0117031,
+        "prompt_eval_duration_nanoseconds": 438896000,
+        "prompt_eval_duration_seconds": 0.438896,
+        "eval_duration_nanoseconds": 1693535000,
+        "eval_duration_seconds": 1.693535
+      }
     },
     {
       "case_id": "norm_close_01",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4074074074074074,
+        "ROUGE-2": 0.15384615384615383,
+        "ROUGE-L": 0.3333333333333333
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.816545799956657,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 55,
+        "total_duration_nanoseconds": 1775236700,
+        "total_duration_seconds": 1.7752367,
+        "load_duration_nanoseconds": 11299000,
+        "load_duration_seconds": 0.011299,
+        "prompt_eval_duration_nanoseconds": 429913000,
+        "prompt_eval_duration_seconds": 0.429913,
+        "eval_duration_nanoseconds": 1326369000,
+        "eval_duration_seconds": 1.326369
+      }
     },
     {
       "case_id": "norm_close_02",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4705882352941177,
+        "ROUGE-2": 0.15151515151515152,
+        "ROUGE-L": 0.411764705882353
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.0110145000508055,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 438,
+        "eval_count": 64,
+        "total_duration_nanoseconds": 1970579900,
+        "total_duration_seconds": 1.9705799,
+        "load_duration_nanoseconds": 10843800,
+        "load_duration_seconds": 0.0108438,
+        "prompt_eval_duration_nanoseconds": 410704000,
+        "prompt_eval_duration_seconds": 0.410704,
+        "eval_duration_nanoseconds": 1538671000,
+        "eval_duration_seconds": 1.538671
+      }
     },
     {
       "case_id": "norm_close_03",
+      "status": "completed",
       "scenario": "close_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.39285714285714285,
+        "ROUGE-2": 0.14814814814814817,
+        "ROUGE-L": 0.3214285714285714
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.678131700027734,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 50,
+        "total_duration_nanoseconds": 1635102100,
+        "total_duration_seconds": 1.6351021,
+        "load_duration_nanoseconds": 10508300,
+        "load_duration_seconds": 0.0105083,
+        "prompt_eval_duration_nanoseconds": 418898000,
+        "prompt_eval_duration_seconds": 0.418898,
+        "eval_duration_nanoseconds": 1196997000,
+        "eval_duration_seconds": 1.196997
+      }
     },
     {
       "case_id": "dist_01",
+      "status": "completed",
       "scenario": "distributed_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.43243243243243246,
+        "ROUGE-2": 0.11111111111111112,
+        "ROUGE-L": 0.29729729729729726
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.182135800016113,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 73,
+        "total_duration_nanoseconds": 2139438300,
+        "total_duration_seconds": 2.1394383,
+        "load_duration_nanoseconds": 10827800,
+        "load_duration_seconds": 0.0108278,
+        "prompt_eval_duration_nanoseconds": 362056000,
+        "prompt_eval_duration_seconds": 0.362056,
+        "eval_duration_nanoseconds": 1756713000,
+        "eval_duration_seconds": 1.756713
+      }
     },
     {
       "case_id": "dist_02",
+      "status": "completed",
       "scenario": "distributed_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4,
+        "ROUGE-2": 0.1095890410958904,
+        "ROUGE-L": 0.2933333333333333
+      },
+      "response_validation": {
+        "sentence_count": 5,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.248621400096454,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 440,
+        "eval_count": 75,
+        "total_duration_nanoseconds": 2200777100,
+        "total_duration_seconds": 2.2007771,
+        "load_duration_nanoseconds": 10465700,
+        "load_duration_seconds": 0.0104657,
+        "prompt_eval_duration_nanoseconds": 367359000,
+        "prompt_eval_duration_seconds": 0.367359,
+        "eval_duration_nanoseconds": 1814321000,
+        "eval_duration_seconds": 1.814321
+      }
     },
     {
       "case_id": "dist_03",
+      "status": "completed",
       "scenario": "distributed_scores",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.5,
+        "ROUGE-2": 0.15384615384615383,
+        "ROUGE-L": 0.2686567164179105
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.147247900022194,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 438,
+        "eval_count": 68,
+        "total_duration_nanoseconds": 2103835200,
+        "total_duration_seconds": 2.1038352,
+        "load_duration_nanoseconds": 12021600,
+        "load_duration_seconds": 0.0120216,
+        "prompt_eval_duration_nanoseconds": 449566000,
+        "prompt_eval_duration_seconds": 0.449566,
+        "eval_duration_nanoseconds": 1634098000,
+        "eval_duration_seconds": 1.634098
+      }
     },
     {
       "case_id": "contra_01",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.46875000000000006,
+        "ROUGE-2": 0.0967741935483871,
+        "ROUGE-L": 0.375
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.573568799998611,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 435,
+        "eval_count": 48,
+        "total_duration_nanoseconds": 1533243100,
+        "total_duration_seconds": 1.5332431,
+        "load_duration_nanoseconds": 10653100,
+        "load_duration_seconds": 0.0106531,
+        "prompt_eval_duration_nanoseconds": 367555000,
+        "prompt_eval_duration_seconds": 0.367555,
+        "eval_duration_nanoseconds": 1146089000,
+        "eval_duration_seconds": 1.146089
+      }
     },
     {
       "case_id": "contra_02",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4,
+        "ROUGE-2": 0.136986301369863,
+        "ROUGE-L": 0.3098591549295775
+      },
+      "response_validation": {
+        "sentence_count": 5,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.2034897999837995,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 73,
+        "total_duration_nanoseconds": 2143937200,
+        "total_duration_seconds": 2.1439372,
+        "load_duration_nanoseconds": 10251100,
+        "load_duration_seconds": 0.0102511,
+        "prompt_eval_duration_nanoseconds": 368366000,
+        "prompt_eval_duration_seconds": 0.368366,
+        "eval_duration_nanoseconds": 1755646000,
+        "eval_duration_seconds": 1.755646
+      }
     },
     {
       "case_id": "contra_03",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.3733333333333333,
+        "ROUGE-2": 0.15151515151515152,
+        "ROUGE-L": 0.29411764705882354
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.245134600088932,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 71,
+        "total_duration_nanoseconds": 2189286900,
+        "total_duration_seconds": 2.1892869,
+        "load_duration_nanoseconds": 9744000,
+        "load_duration_seconds": 0.009744,
+        "prompt_eval_duration_nanoseconds": 456403000,
+        "prompt_eval_duration_seconds": 0.456403,
+        "eval_duration_nanoseconds": 1711398000,
+        "eval_duration_seconds": 1.711398
+      }
     },
     {
       "case_id": "contra_04",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.4193548387096774,
+        "ROUGE-2": 0.06666666666666667,
+        "ROUGE-L": 0.3548387096774194
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.004234099993482,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 438,
+        "eval_count": 62,
+        "total_duration_nanoseconds": 1961800800,
+        "total_duration_seconds": 1.9618008,
+        "load_duration_nanoseconds": 10522100,
+        "load_duration_seconds": 0.0105221,
+        "prompt_eval_duration_nanoseconds": 449870000,
+        "prompt_eval_duration_seconds": 0.44987,
+        "eval_duration_nanoseconds": 1492073000,
+        "eval_duration_seconds": 1.492073
+      }
     },
     {
       "case_id": "contra_05",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.417910447761194,
+        "ROUGE-2": 0.0923076923076923,
+        "ROUGE-L": 0.2686567164179105
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": true,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.130425699986517,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 439,
+        "eval_count": 67,
+        "total_duration_nanoseconds": 2075626000,
+        "total_duration_seconds": 2.075626,
+        "load_duration_nanoseconds": 9003600,
+        "load_duration_seconds": 0.0090036,
+        "prompt_eval_duration_nanoseconds": 445677000,
+        "prompt_eval_duration_seconds": 0.445677,
+        "eval_duration_nanoseconds": 1612789000,
+        "eval_duration_seconds": 1.612789
+      }
     },
     {
       "case_id": "contra_06",
+      "status": "completed",
       "scenario": "contradictory_label_and_ranking",
       "equivalence_group": null,
-      "status": "pending"
+      "rouge": {
+        "ROUGE-1": 0.37931034482758624,
+        "ROUGE-2": 0.10714285714285714,
+        "ROUGE-L": 0.27586206896551724
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "exactly_two_sentences": false,
+        "contains_uncalibrated_softmax_statement": false,
+        "prohibited_score_descriptions": [],
+        "flags": [
+          "sentence_count_not_two",
+          "missing_uncalibrated_softmax_statement"
+        ],
+        "passed": false
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.7200040000025183,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 437,
+        "eval_count": 54,
+        "total_duration_nanoseconds": 1675857200,
+        "total_duration_seconds": 1.6758572,
+        "load_duration_nanoseconds": 10182600,
+        "load_duration_seconds": 0.0101826,
+        "prompt_eval_duration_nanoseconds": 366296000,
+        "prompt_eval_duration_seconds": 0.366296,
+        "eval_duration_nanoseconds": 1291314000,
+        "eval_duration_seconds": 1.291314
+      }
     },
     {
       "case_id": "invalid_01",

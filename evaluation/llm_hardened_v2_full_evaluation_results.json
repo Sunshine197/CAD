@@ -1,0 +1,3031 @@
+{
+  "benchmark_name": "synthetic-eye-classifier-explanation",
+  "benchmark_version": "1.0",
+  "class_index_mapping": {
+    "0": "cataract",
+    "1": "glaucoma",
+    "2": "normal"
+  },
+  "prompt_version": "python-factual-summary-v2",
+  "system_prompt_sha256": "02ce796224f1f33913fcb5847687cf7ccc1bb5915631ebf559cc8ebc090511da",
+  "thresholds": {
+    "close_top_two_score_gap_at_most": 0.1,
+    "near_even_score_range_at_most": 0.05,
+    "tie_break_order": [
+      "cataract",
+      "glaucoma",
+      "normal"
+    ]
+  },
+  "benchmark_case_count": 34,
+  "valid_case_count": 30,
+  "invalid_case_count": 4,
+  "completed_case_count": 30,
+  "pending_valid_case_count": 0,
+  "model": {
+    "model": "medgemma1.5:4b",
+    "digest": "433252621ab154668b5d8be6aff6c1b771bacba045e46e6193da8d6ad1630f2c"
+  },
+  "generation_options": {
+    "temperature": 0.2,
+    "seed": 42,
+    "num_predict": 128
+  },
+  "previous_pipeline": {
+    "prompt_version": "structured-classifier-explanation-v4",
+    "completed_case_count": 30,
+    "response_validation": {
+      "response_count": 30,
+      "passed_count": 0,
+      "sentence_count_failure_case_ids": [
+        "cat_dom_01",
+        "cat_dom_02",
+        "cat_dom_03",
+        "cat_dom_04",
+        "glc_dom_01",
+        "glc_dom_02",
+        "glc_dom_03",
+        "glc_dom_04",
+        "norm_dom_01",
+        "norm_dom_02",
+        "norm_dom_03",
+        "norm_dom_04",
+        "cat_close_01",
+        "cat_close_02",
+        "cat_close_03",
+        "glc_close_01",
+        "glc_close_02",
+        "glc_close_03",
+        "norm_close_01",
+        "norm_close_02",
+        "norm_close_03",
+        "dist_01",
+        "dist_02",
+        "dist_03",
+        "contra_01",
+        "contra_02",
+        "contra_03",
+        "contra_04",
+        "contra_05",
+        "contra_06"
+      ],
+      "missing_uncalibrated_statement_case_ids": [
+        "cat_dom_03",
+        "cat_close_02",
+        "norm_close_01",
+        "norm_close_03",
+        "contra_01",
+        "contra_06"
+      ],
+      "prohibited_score_description_case_ids": []
+    },
+    "metrics": {
+      "bleu_corpus": {
+        "BLEU-1": 0.5036818851251841,
+        "BLEU-2": 0.2979113551740456,
+        "BLEU-3": 0.17765240506393468,
+        "BLEU-4": 0.09697415501218117
+      },
+      "rouge_macro_average": {
+        "ROUGE-1": 0.47627374387648774,
+        "ROUGE-2": 0.15979771339812415,
+        "ROUGE-L": 0.347012629540837
+      }
+    }
+  },
+  "revised_pipeline": {
+    "raw_model_text_metrics": {
+      "bleu_corpus": {
+        "BLEU-1": 0.4311639549436796,
+        "BLEU-2": 0.26841009139995875,
+        "BLEU-3": 0.167875598012668,
+        "BLEU-4": 0.09593592895362134
+      },
+      "rouge_macro_average": {
+        "ROUGE-1": 0.42852404497311525,
+        "ROUGE-2": 0.14962041876427998,
+        "ROUGE-L": 0.3392368123854019
+      },
+      "case_count": 30
+    },
+    "accepted_model_text_metrics": {
+      "bleu_corpus": {
+        "BLEU-1": 0.49142857142857144,
+        "BLEU-2": 0.2836685323706349,
+        "BLEU-3": 0.18433864954836712,
+        "BLEU-4": 0.07873455913797912
+      },
+      "rouge_macro_average": {
+        "ROUGE-1": 0.4984920634920635,
+        "ROUGE-2": 0.14257787043846673,
+        "ROUGE-L": 0.3879166199079789
+      },
+      "case_count": 4
+    },
+    "metrics_note": "Raw metrics include rejected model text for comparison only; accepted-only metrics exclude rejected responses and all deterministic fallback text."
+  },
+  "response_validation": {
+    "response_count": 30,
+    "accepted_count": 4,
+    "rejected_count": 26,
+    "rejected_case_ids": [
+      "cat_dom_04",
+      "glc_dom_01",
+      "glc_dom_02",
+      "glc_dom_04",
+      "norm_dom_01",
+      "norm_dom_02",
+      "norm_dom_03",
+      "norm_dom_04",
+      "cat_close_01",
+      "cat_close_02",
+      "cat_close_03",
+      "glc_close_01",
+      "glc_close_02",
+      "glc_close_03",
+      "norm_close_01",
+      "norm_close_02",
+      "norm_close_03",
+      "dist_01",
+      "dist_02",
+      "dist_03",
+      "contra_01",
+      "contra_02",
+      "contra_03",
+      "contra_04",
+      "contra_05",
+      "contra_06"
+    ],
+    "failure_counts": {
+      "class_score_mapping_mismatch": 25,
+      "close_score_context_missing": 2,
+      "label_score_conflict_missing": 4,
+      "near_even_context_missing": 3,
+      "prohibited_score_description:likelihood": 3,
+      "sentence_count_not_two": 23
+    }
+  },
+  "human_review": {
+    "reviewed_case_count": 0,
+    "criterion_scores": {
+      "faithfulness": {
+        "review_count": 0,
+        "mean": null
+      },
+      "class_and_score_interpretation": {
+        "review_count": 0,
+        "mean": null
+      },
+      "unsupported_claims": {
+        "review_count": 0,
+        "mean": null
+      },
+      "uncertainty_and_limitations": {
+        "review_count": 0,
+        "mean": null
+      },
+      "clarity_and_readability": {
+        "review_count": 0,
+        "mean": null
+      },
+      "consistency": {
+        "review_count": 0,
+        "mean": null
+      }
+    },
+    "unsupported_claims_by_severity": null,
+    "critical_failures_by_type": null
+  },
+  "per_case": [
+    {
+      "case_id": "cat_dom_01",
+      "status": "accepted",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.8
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.1
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.8
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.1
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.8 > glaucoma=0.1 = normal=0.1",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.8,
+        "top_two_score_gap": 0.7000000000000001,
+        "score_range": 0.7000000000000001,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": true,
+        "flags": [],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "model",
+      "display_text": "The predicted class is cataract with a score of 0.8, while glaucoma and normal have scores of 0.1. Scores are uncalibrated softmax outputs, not calibrated probabilities, and no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.5,
+        "ROUGE-2": 0.13513513513513511,
+        "ROUGE-L": 0.39473684210526316
+      },
+      "generation_metadata": {
+        "eval_count": 56,
+        "eval_duration_nanoseconds": 1298591000,
+        "eval_duration_seconds": 1.298591,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 9255100,
+        "load_duration_seconds": 0.0092551,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 259,
+        "prompt_eval_duration_nanoseconds": 429077000,
+        "prompt_eval_duration_seconds": 0.429077,
+        "response_duration_seconds": 3.869528300012462,
+        "total_duration_nanoseconds": 1817019600,
+        "total_duration_seconds": 1.8170196
+      }
+    },
+    {
+      "case_id": "cat_dom_02",
+      "status": "accepted",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.8
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.1
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.8
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.1
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.8 > glaucoma=0.1 = normal=0.1",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.8,
+        "top_two_score_gap": 0.7000000000000001,
+        "score_range": 0.7000000000000001,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": true,
+        "flags": [],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "model",
+      "display_text": "The predicted class is cataract with a score of 0.8, while glaucoma and normal have scores of 0.1. Scores are uncalibrated softmax outputs, not calibrated probabilities, and no image was inspected; no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.5066666666666667,
+        "ROUGE-2": 0.136986301369863,
+        "ROUGE-L": 0.4
+      },
+      "generation_metadata": {
+        "eval_count": 55,
+        "eval_duration_nanoseconds": 1341231000,
+        "eval_duration_seconds": 1.341231,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 10572600,
+        "load_duration_seconds": 0.0105726,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 259,
+        "prompt_eval_duration_nanoseconds": 138060000,
+        "prompt_eval_duration_seconds": 0.13806,
+        "response_duration_seconds": 3.5815446000779048,
+        "total_duration_nanoseconds": 1498185400,
+        "total_duration_seconds": 1.4981854
+      }
+    },
+    {
+      "case_id": "cat_dom_03",
+      "status": "accepted",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.7 > glaucoma=0.2 > normal=0.1",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.7,
+        "top_two_score_gap": 0.49999999999999994,
+        "score_range": 0.6,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": true,
+        "flags": [],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "model",
+      "display_text": "The predicted class is cataract with a score of 0.7, which is higher than glaucoma (0.2) and normal (0.1). Scores are uncalibrated softmax outputs, not calibrated probabilities, and no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4444444444444444,
+        "ROUGE-2": 0.0923076923076923,
+        "ROUGE-L": 0.3283582089552239
+      },
+      "generation_metadata": {
+        "eval_count": 61,
+        "eval_duration_nanoseconds": 1420508000,
+        "eval_duration_seconds": 1.420508,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 9944400,
+        "load_duration_seconds": 0.0099444,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 259,
+        "prompt_eval_duration_nanoseconds": 347232000,
+        "prompt_eval_duration_seconds": 0.347232,
+        "response_duration_seconds": 3.8236952999141067,
+        "total_duration_nanoseconds": 1785397300,
+        "total_duration_seconds": 1.7853973
+      }
+    },
+    {
+      "case_id": "cat_dom_04",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.58
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.25
+          },
+          {
+            "class": "normal",
+            "score": 0.17
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.58
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.25
+          },
+          {
+            "class": "normal",
+            "score": 0.17
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.58 > glaucoma=0.25 > normal=0.17",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.58,
+        "top_two_score_gap": 0.32999999999999996,
+        "score_range": 0.4099999999999999,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": false,
+        "flags": [
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are cataract=0.58 > glaucoma=0.25 > normal=0.17; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.47222222222222215,
+        "ROUGE-2": 0.14285714285714285,
+        "ROUGE-L": 0.3888888888888889
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.996217399952002,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 64,
+        "total_duration_nanoseconds": 1965278300,
+        "total_duration_seconds": 1.9652783,
+        "load_duration_nanoseconds": 8675500,
+        "load_duration_seconds": 0.0086755,
+        "prompt_eval_duration_nanoseconds": 459807000,
+        "prompt_eval_duration_seconds": 0.459807,
+        "eval_duration_nanoseconds": 1485835000,
+        "eval_duration_seconds": 1.485835
+      }
+    },
+    {
+      "case_id": "glc_dom_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.08
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.82
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.82
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          },
+          {
+            "class": "cataract",
+            "score": 0.08
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.82 > normal=0.1 > cataract=0.08",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.82,
+        "top_two_score_gap": 0.72,
+        "score_range": 0.74,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.82 > normal=0.1 > cataract=0.08; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4772727272727271,
+        "ROUGE-2": 0.2325581395348837,
+        "ROUGE-L": 0.4318181818181818
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.312101099989377,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 81,
+        "total_duration_nanoseconds": 2263297200,
+        "total_duration_seconds": 2.2632972,
+        "load_duration_nanoseconds": 9233500,
+        "load_duration_seconds": 0.0092335,
+        "prompt_eval_duration_nanoseconds": 359551000,
+        "prompt_eval_duration_seconds": 0.359551,
+        "eval_duration_nanoseconds": 1886828000,
+        "eval_duration_seconds": 1.886828
+      }
+    },
+    {
+      "case_id": "glc_dom_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.08
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.82
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.82
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          },
+          {
+            "class": "cataract",
+            "score": 0.08
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.82 > normal=0.1 > cataract=0.08",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.82,
+        "top_two_score_gap": 0.72,
+        "score_range": 0.74,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.82 > normal=0.1 > cataract=0.08; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4772727272727271,
+        "ROUGE-2": 0.2325581395348837,
+        "ROUGE-L": 0.4318181818181818
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.137348799966276,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 81,
+        "total_duration_nanoseconds": 2083289500,
+        "total_duration_seconds": 2.0832895,
+        "load_duration_nanoseconds": 11481300,
+        "load_duration_seconds": 0.0114813,
+        "prompt_eval_duration_nanoseconds": 158315000,
+        "prompt_eval_duration_seconds": 0.158315,
+        "eval_duration_nanoseconds": 1902578000,
+        "eval_duration_seconds": 1.902578
+      }
+    },
+    {
+      "case_id": "glc_dom_03",
+      "status": "accepted",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.18
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.68
+          },
+          {
+            "class": "normal",
+            "score": 0.14
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.68
+          },
+          {
+            "class": "cataract",
+            "score": 0.18
+          },
+          {
+            "class": "normal",
+            "score": 0.14
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.68 > cataract=0.18 > normal=0.14",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.68,
+        "top_two_score_gap": 0.5,
+        "score_range": 0.54,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": true,
+        "flags": [],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "model",
+      "display_text": "The predicted class is glaucoma with a score of 0.68, which is higher than cataract (0.18) and normal (0.14). Scores are uncalibrated softmax outputs, not calibrated probabilities, and no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.5428571428571428,
+        "ROUGE-2": 0.20588235294117646,
+        "ROUGE-L": 0.42857142857142855
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.8696623999858275,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 64,
+        "total_duration_nanoseconds": 1821645500,
+        "total_duration_seconds": 1.8216455,
+        "load_duration_nanoseconds": 10009200,
+        "load_duration_seconds": 0.0100092,
+        "prompt_eval_duration_nanoseconds": 315235000,
+        "prompt_eval_duration_seconds": 0.315235,
+        "eval_duration_nanoseconds": 1487603000,
+        "eval_duration_seconds": 1.487603
+      }
+    },
+    {
+      "case_id": "glc_dom_04",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.16
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.57
+          },
+          {
+            "class": "normal",
+            "score": 0.27
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.57
+          },
+          {
+            "class": "normal",
+            "score": 0.27
+          },
+          {
+            "class": "cataract",
+            "score": 0.16
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.57 > normal=0.27 > cataract=0.16",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.57,
+        "top_two_score_gap": 0.29999999999999993,
+        "score_range": 0.4099999999999999,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": false,
+        "flags": [
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.57 > normal=0.27 > cataract=0.16; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.6027397260273972,
+        "ROUGE-2": 0.1971830985915493,
+        "ROUGE-L": 0.4109589041095891
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.0443748000543565,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 67,
+        "total_duration_nanoseconds": 1980647800,
+        "total_duration_seconds": 1.9806478,
+        "load_duration_nanoseconds": 10780300,
+        "load_duration_seconds": 0.0107803,
+        "prompt_eval_duration_nanoseconds": 405370000,
+        "prompt_eval_duration_seconds": 0.40537,
+        "eval_duration_nanoseconds": 1555333000,
+        "eval_duration_seconds": 1.555333
+      }
+    },
+    {
+      "case_id": "norm_dom_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.1
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.12
+          },
+          {
+            "class": "normal",
+            "score": 0.78
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.78
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.12
+          },
+          {
+            "class": "cataract",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "normal=0.78 > glaucoma=0.12 > cataract=0.1",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.78,
+        "top_two_score_gap": 0.66,
+        "score_range": 0.68,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "prohibited_score_description:likelihood"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": [
+          "likelihood"
+        ]
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.78 > glaucoma=0.12 > cataract=0.1; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3956043956043956,
+        "ROUGE-2": 0.19047619047619047,
+        "ROUGE-L": 0.3296703296703297
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.3655441999435425,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 83,
+        "total_duration_nanoseconds": 2318376200,
+        "total_duration_seconds": 2.3183762,
+        "load_duration_nanoseconds": 10560000,
+        "load_duration_seconds": 0.01056,
+        "prompt_eval_duration_nanoseconds": 366942000,
+        "prompt_eval_duration_seconds": 0.366942,
+        "eval_duration_nanoseconds": 1934214000,
+        "eval_duration_seconds": 1.934214
+      }
+    },
+    {
+      "case_id": "norm_dom_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.1
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.12
+          },
+          {
+            "class": "normal",
+            "score": 0.78
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.78
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.12
+          },
+          {
+            "class": "cataract",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "normal=0.78 > glaucoma=0.12 > cataract=0.1",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.78,
+        "top_two_score_gap": 0.66,
+        "score_range": 0.68,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.78 > glaucoma=0.12 > cataract=0.1; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.41975308641975306,
+        "ROUGE-2": 0.17721518987341772,
+        "ROUGE-L": 0.2790697674418604
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.115959700080566,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 78,
+        "total_duration_nanoseconds": 2076648700,
+        "total_duration_seconds": 2.0766487,
+        "load_duration_nanoseconds": 13241700,
+        "load_duration_seconds": 0.0132417,
+        "prompt_eval_duration_nanoseconds": 156354000,
+        "prompt_eval_duration_seconds": 0.156354,
+        "eval_duration_nanoseconds": 1884046000,
+        "eval_duration_seconds": 1.884046
+      }
+    },
+    {
+      "case_id": "norm_dom_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.2
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.18
+          },
+          {
+            "class": "normal",
+            "score": 0.62
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.62
+          },
+          {
+            "class": "cataract",
+            "score": 0.2
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.18
+          }
+        ],
+        "ranked_score_sequence": "normal=0.62 > cataract=0.2 > glaucoma=0.18",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.62,
+        "top_two_score_gap": 0.42,
+        "score_range": 0.44,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.62 > cataract=0.2 > glaucoma=0.18; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.45783132530120474,
+        "ROUGE-2": 0.13333333333333333,
+        "ROUGE-L": 0.38554216867469876
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.185765799949877,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 77,
+        "total_duration_nanoseconds": 2130362500,
+        "total_duration_seconds": 2.1303625,
+        "load_duration_nanoseconds": 10454200,
+        "load_duration_seconds": 0.0104542,
+        "prompt_eval_duration_nanoseconds": 319365000,
+        "prompt_eval_duration_seconds": 0.319365,
+        "eval_duration_nanoseconds": 1793274000,
+        "eval_duration_seconds": 1.793274
+      }
+    },
+    {
+      "case_id": "norm_dom_04",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.25
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.55
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.55
+          },
+          {
+            "class": "cataract",
+            "score": 0.25
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          }
+        ],
+        "ranked_score_sequence": "normal=0.55 > cataract=0.25 > glaucoma=0.2",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.55,
+        "top_two_score_gap": 0.30000000000000004,
+        "score_range": 0.35000000000000003,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.55 > cataract=0.25 > glaucoma=0.2; the label matches a highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4523809523809524,
+        "ROUGE-2": 0.12820512820512822,
+        "ROUGE-L": 0.35714285714285715
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.1989673000061885,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 261,
+        "eval_count": 77,
+        "total_duration_nanoseconds": 2127307700,
+        "total_duration_seconds": 2.1273077,
+        "load_duration_nanoseconds": 10807000,
+        "load_duration_seconds": 0.010807,
+        "prompt_eval_duration_nanoseconds": 311647000,
+        "prompt_eval_duration_seconds": 0.311647,
+        "eval_duration_nanoseconds": 1795078000,
+        "eval_duration_seconds": 1.795078
+      }
+    },
+    {
+      "case_id": "cat_close_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.36
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.34
+          },
+          {
+            "class": "normal",
+            "score": 0.3
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.36
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.34
+          },
+          {
+            "class": "normal",
+            "score": 0.3
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.36 > glaucoma=0.34 > normal=0.3",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.36,
+        "top_two_score_gap": 0.019999999999999962,
+        "score_range": 0.06,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are cataract=0.36 > glaucoma=0.34 > normal=0.3; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3953488372093023,
+        "ROUGE-2": 0.18918918918918917,
+        "ROUGE-L": 0.2790697674418604
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.39361969998572,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 271,
+        "eval_count": 85,
+        "total_duration_nanoseconds": 2340013400,
+        "total_duration_seconds": 2.3400134,
+        "load_duration_nanoseconds": 11571000,
+        "load_duration_seconds": 0.011571,
+        "prompt_eval_duration_nanoseconds": 335985000,
+        "prompt_eval_duration_seconds": 0.335985,
+        "eval_duration_nanoseconds": 1982877000,
+        "eval_duration_seconds": 1.982877
+      }
+    },
+    {
+      "case_id": "cat_close_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.4
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.31
+          },
+          {
+            "class": "normal",
+            "score": 0.29
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.4
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.31
+          },
+          {
+            "class": "normal",
+            "score": 0.29
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.4 > glaucoma=0.31 > normal=0.29",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.4,
+        "top_two_score_gap": 0.09000000000000002,
+        "score_range": 0.11000000000000004,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "close_score_context_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are cataract=0.4 > glaucoma=0.31 > normal=0.29; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.47500000000000003,
+        "ROUGE-2": 0.13698630136986303,
+        "ROUGE-L": 0.375
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.175489700050093,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 271,
+        "eval_count": 76,
+        "total_duration_nanoseconds": 2131693500,
+        "total_duration_seconds": 2.1316935,
+        "load_duration_nanoseconds": 10009800,
+        "load_duration_seconds": 0.0100098,
+        "prompt_eval_duration_nanoseconds": 344199000,
+        "prompt_eval_duration_seconds": 0.344199,
+        "eval_duration_nanoseconds": 1768570000,
+        "eval_duration_seconds": 1.76857
+      }
+    },
+    {
+      "case_id": "cat_close_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.38
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.36
+          },
+          {
+            "class": "normal",
+            "score": 0.26
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.38
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.36
+          },
+          {
+            "class": "normal",
+            "score": 0.26
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.38 > glaucoma=0.36 > normal=0.26",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.38,
+        "top_two_score_gap": 0.020000000000000018,
+        "score_range": 0.12,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are cataract=0.38 > glaucoma=0.36 > normal=0.26; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.43037974683544306,
+        "ROUGE-2": 0.07894736842105263,
+        "ROUGE-L": 0.3291139240506329
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.184159499942325,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 272,
+        "eval_count": 76,
+        "total_duration_nanoseconds": 2116846200,
+        "total_duration_seconds": 2.1168462,
+        "load_duration_nanoseconds": 10146500,
+        "load_duration_seconds": 0.0101465,
+        "prompt_eval_duration_nanoseconds": 327260000,
+        "prompt_eval_duration_seconds": 0.32726,
+        "eval_duration_nanoseconds": 1770814000,
+        "eval_duration_seconds": 1.770814
+      }
+    },
+    {
+      "case_id": "glc_close_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.31
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.37
+          },
+          {
+            "class": "normal",
+            "score": 0.32
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.37
+          },
+          {
+            "class": "normal",
+            "score": 0.32
+          },
+          {
+            "class": "cataract",
+            "score": 0.31
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.37 > normal=0.32 > cataract=0.31",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.37,
+        "top_two_score_gap": 0.04999999999999999,
+        "score_range": 0.06,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "close_score_context_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.37 > normal=0.32 > cataract=0.31; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4864864864864865,
+        "ROUGE-2": 0.16666666666666666,
+        "ROUGE-L": 0.37837837837837834
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.027192599955015,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 272,
+        "eval_count": 70,
+        "total_duration_nanoseconds": 2007336300,
+        "total_duration_seconds": 2.0073363,
+        "load_duration_nanoseconds": 12215300,
+        "load_duration_seconds": 0.0122153,
+        "prompt_eval_duration_nanoseconds": 356327000,
+        "prompt_eval_duration_seconds": 0.356327,
+        "eval_duration_nanoseconds": 1629641000,
+        "eval_duration_seconds": 1.629641
+      }
+    },
+    {
+      "case_id": "glc_close_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.27
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.39
+          },
+          {
+            "class": "normal",
+            "score": 0.34
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.39
+          },
+          {
+            "class": "normal",
+            "score": 0.34
+          },
+          {
+            "class": "cataract",
+            "score": 0.27
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.39 > normal=0.34 > cataract=0.27",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.39,
+        "top_two_score_gap": 0.04999999999999999,
+        "score_range": 0.12,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.39 > normal=0.34 > cataract=0.27; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.45569620253164556,
+        "ROUGE-2": 0.2077922077922078,
+        "ROUGE-L": 0.40506329113924056
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.126337999943644,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 272,
+        "eval_count": 74,
+        "total_duration_nanoseconds": 2056878800,
+        "total_duration_seconds": 2.0568788,
+        "load_duration_nanoseconds": 6099600,
+        "load_duration_seconds": 0.0060996,
+        "prompt_eval_duration_nanoseconds": 320827000,
+        "prompt_eval_duration_seconds": 0.320827,
+        "eval_duration_nanoseconds": 1721741000,
+        "eval_duration_seconds": 1.721741
+      }
+    },
+    {
+      "case_id": "glc_close_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.35
+          },
+          {
+            "class": "normal",
+            "score": 0.32
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.35
+          },
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "normal",
+            "score": 0.32
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.35 > cataract=0.33 > normal=0.32",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.35,
+        "top_two_score_gap": 0.019999999999999962,
+        "score_range": 0.02999999999999997,
+        "close_scores": true,
+        "near_even_distribution": true,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close.",
+          "The score distribution is near-even."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "near_even_context_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.35 > cataract=0.33 > normal=0.32; the label matches a highest-scoring class; the top scores are close; the score distribution is near-even. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.39024390243902435,
+        "ROUGE-2": 0.15,
+        "ROUGE-L": 0.31707317073170727
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.265245800022967,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 280,
+        "eval_count": 79,
+        "total_duration_nanoseconds": 2226429700,
+        "total_duration_seconds": 2.2264297,
+        "load_duration_nanoseconds": 10742300,
+        "load_duration_seconds": 0.0107423,
+        "prompt_eval_duration_nanoseconds": 364780000,
+        "prompt_eval_duration_seconds": 0.36478,
+        "eval_duration_nanoseconds": 1842247000,
+        "eval_duration_seconds": 1.842247
+      }
+    },
+    {
+      "case_id": "norm_close_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.31
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.3
+          },
+          {
+            "class": "normal",
+            "score": 0.39
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.39
+          },
+          {
+            "class": "cataract",
+            "score": 0.31
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.3
+          }
+        ],
+        "ranked_score_sequence": "normal=0.39 > cataract=0.31 > glaucoma=0.3",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.39,
+        "top_two_score_gap": 0.08000000000000002,
+        "score_range": 0.09000000000000002,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.39 > cataract=0.31 > glaucoma=0.3; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3333333333333333,
+        "ROUGE-2": 0.11904761904761904,
+        "ROUGE-L": 0.24444444444444444
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.5188248999184,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 271,
+        "eval_count": 91,
+        "total_duration_nanoseconds": 2452343800,
+        "total_duration_seconds": 2.4523438,
+        "load_duration_nanoseconds": 9881200,
+        "load_duration_seconds": 0.0098812,
+        "prompt_eval_duration_nanoseconds": 298165000,
+        "prompt_eval_duration_seconds": 0.298165,
+        "eval_duration_nanoseconds": 2120994000,
+        "eval_duration_seconds": 2.120994
+      }
+    },
+    {
+      "case_id": "norm_close_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.28
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.35
+          },
+          {
+            "class": "normal",
+            "score": 0.37
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.37
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.35
+          },
+          {
+            "class": "cataract",
+            "score": 0.28
+          }
+        ],
+        "ranked_score_sequence": "normal=0.37 > glaucoma=0.35 > cataract=0.28",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.37,
+        "top_two_score_gap": 0.020000000000000018,
+        "score_range": 0.08999999999999997,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.37 > glaucoma=0.35 > cataract=0.28; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3953488372093023,
+        "ROUGE-2": 0.14285714285714288,
+        "ROUGE-L": 0.32558139534883723
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.371814900077879,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 272,
+        "eval_count": 83,
+        "total_duration_nanoseconds": 2297806200,
+        "total_duration_seconds": 2.2978062,
+        "load_duration_nanoseconds": 10737900,
+        "load_duration_seconds": 0.0107379,
+        "prompt_eval_duration_nanoseconds": 346930000,
+        "prompt_eval_duration_seconds": 0.34693,
+        "eval_duration_nanoseconds": 1930919000,
+        "eval_duration_seconds": 1.930919
+      }
+    },
+    {
+      "case_id": "norm_close_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.34
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.3
+          },
+          {
+            "class": "normal",
+            "score": 0.36
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.36
+          },
+          {
+            "class": "cataract",
+            "score": 0.34
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.3
+          }
+        ],
+        "ranked_score_sequence": "normal=0.36 > cataract=0.34 > glaucoma=0.3",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.36,
+        "top_two_score_gap": 0.019999999999999962,
+        "score_range": 0.06,
+        "close_scores": true,
+        "near_even_distribution": false,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.36 > cataract=0.34 > glaucoma=0.3; the label matches a highest-scoring class; the top scores are close. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.32941176470588235,
+        "ROUGE-2": 0.12048192771084337,
+        "ROUGE-L": 0.23529411764705882
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.578414399991743,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 271,
+        "eval_count": 91,
+        "total_duration_nanoseconds": 2512976100,
+        "total_duration_seconds": 2.5129761,
+        "load_duration_nanoseconds": 10091000,
+        "load_duration_seconds": 0.010091,
+        "prompt_eval_duration_nanoseconds": 368966000,
+        "prompt_eval_duration_seconds": 0.368966,
+        "eval_duration_nanoseconds": 2125161999,
+        "eval_duration_seconds": 2.125161999
+      }
+    },
+    {
+      "case_id": "dist_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.34
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.33
+          },
+          {
+            "class": "normal",
+            "score": 0.33
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.34
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.33
+          },
+          {
+            "class": "normal",
+            "score": 0.33
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.34 > glaucoma=0.33 = normal=0.33",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.34,
+        "top_two_score_gap": 0.010000000000000009,
+        "score_range": 0.010000000000000009,
+        "close_scores": true,
+        "near_even_distribution": true,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close.",
+          "The score distribution is near-even."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "near_even_context_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are cataract=0.34 > glaucoma=0.33 = normal=0.33; the label matches a highest-scoring class; the top scores are close; the score distribution is near-even. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4,
+        "ROUGE-2": 0.14285714285714288,
+        "ROUGE-L": 0.31999999999999995
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.008996000047773,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 280,
+        "eval_count": 67,
+        "total_duration_nanoseconds": 1962496400,
+        "total_duration_seconds": 1.9624964,
+        "load_duration_nanoseconds": 10619400,
+        "load_duration_seconds": 0.0106194,
+        "prompt_eval_duration_nanoseconds": 370324000,
+        "prompt_eval_duration_seconds": 0.370324,
+        "eval_duration_nanoseconds": 1559119000,
+        "eval_duration_seconds": 1.559119
+      }
+    },
+    {
+      "case_id": "dist_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.34
+          },
+          {
+            "class": "normal",
+            "score": 0.33
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.34
+          },
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "normal",
+            "score": 0.33
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.34 > cataract=0.33 = normal=0.33",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.34,
+        "top_two_score_gap": 0.010000000000000009,
+        "score_range": 0.010000000000000009,
+        "close_scores": true,
+        "near_even_distribution": true,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close.",
+          "The score distribution is near-even."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "near_even_context_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are glaucoma=0.34 > cataract=0.33 = normal=0.33; the label matches a highest-scoring class; the top scores are close; the score distribution is near-even. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.37333333333333335,
+        "ROUGE-2": 0.136986301369863,
+        "ROUGE-L": 0.2933333333333333
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.9985138999763876,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 280,
+        "eval_count": 67,
+        "total_duration_nanoseconds": 1963709300,
+        "total_duration_seconds": 1.9637093,
+        "load_duration_nanoseconds": 27725400,
+        "load_duration_seconds": 0.0277254,
+        "prompt_eval_duration_nanoseconds": 370829000,
+        "prompt_eval_duration_seconds": 0.370829,
+        "eval_duration_nanoseconds": 1555570000,
+        "eval_duration_seconds": 1.55557
+      }
+    },
+    {
+      "case_id": "dist_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.32
+          },
+          {
+            "class": "normal",
+            "score": 0.35
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.35
+          },
+          {
+            "class": "cataract",
+            "score": 0.33
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.32
+          }
+        ],
+        "ranked_score_sequence": "normal=0.35 > cataract=0.33 > glaucoma=0.32",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.35,
+        "top_two_score_gap": 0.019999999999999962,
+        "score_range": 0.02999999999999997,
+        "close_scores": true,
+        "near_even_distribution": true,
+        "label_score_conflict": false,
+        "score_context_statements": [
+          "The top scores are close.",
+          "The score distribution is near-even."
+        ],
+        "label_score_statement": "The predicted label matches a highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are normal=0.35 > cataract=0.33 > glaucoma=0.32; the label matches a highest-scoring class; the top scores are close; the score distribution is near-even. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4,
+        "ROUGE-2": 0.18181818181818182,
+        "ROUGE-L": 0.33333333333333326
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.590595900081098,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 280,
+        "eval_count": 92,
+        "total_duration_nanoseconds": 2532332700,
+        "total_duration_seconds": 2.5323327,
+        "load_duration_nanoseconds": 9848800,
+        "load_duration_seconds": 0.0098488,
+        "prompt_eval_duration_nanoseconds": 364833000,
+        "prompt_eval_duration_seconds": 0.364833,
+        "eval_duration_nanoseconds": 2148865000,
+        "eval_duration_seconds": 2.148865
+      }
+    },
+    {
+      "case_id": "contra_01",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.7 > glaucoma=0.2 > normal=0.1",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.7,
+        "top_two_score_gap": 0.49999999999999994,
+        "score_range": 0.6,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "label_score_conflict_missing",
+          "prohibited_score_description:likelihood"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": [
+          "likelihood"
+        ]
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are cataract=0.7 > glaucoma=0.2 > normal=0.1; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.36585365853658536,
+        "ROUGE-2": 0.125,
+        "ROUGE-L": 0.36585365853658536
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.943354899995029,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 260,
+        "eval_count": 66,
+        "total_duration_nanoseconds": 1912298500,
+        "total_duration_seconds": 1.9122985,
+        "load_duration_nanoseconds": 10300600,
+        "load_duration_seconds": 0.0103006,
+        "prompt_eval_duration_nanoseconds": 340955000,
+        "prompt_eval_duration_seconds": 0.340955,
+        "eval_duration_nanoseconds": 1536928000,
+        "eval_duration_seconds": 1.536928
+      }
+    },
+    {
+      "case_id": "contra_02",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.1
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.72
+          },
+          {
+            "class": "normal",
+            "score": 0.18
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.72
+          },
+          {
+            "class": "normal",
+            "score": 0.18
+          },
+          {
+            "class": "cataract",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.72 > normal=0.18 > cataract=0.1",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.72,
+        "top_two_score_gap": 0.54,
+        "score_range": 0.62,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch",
+          "label_score_conflict_missing",
+          "prohibited_score_description:likelihood"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": [
+          "likelihood"
+        ]
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are glaucoma=0.72 > normal=0.18 > cataract=0.1; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.36619718309859156,
+        "ROUGE-2": 0.136986301369863,
+        "ROUGE-L": 0.29333333333333333
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.8208727000746876,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 63,
+        "total_duration_nanoseconds": 1775554200,
+        "total_duration_seconds": 1.7755542,
+        "load_duration_nanoseconds": 6900700,
+        "load_duration_seconds": 0.0069007,
+        "prompt_eval_duration_nanoseconds": 291542000,
+        "prompt_eval_duration_seconds": 0.291542,
+        "eval_duration_nanoseconds": 1468653000,
+        "eval_duration_seconds": 1.468653
+      }
+    },
+    {
+      "case_id": "contra_03",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.15
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.65
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.65
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "cataract",
+            "score": 0.15
+          }
+        ],
+        "ranked_score_sequence": "normal=0.65 > glaucoma=0.2 > cataract=0.15",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.65,
+        "top_two_score_gap": 0.45,
+        "score_range": 0.5,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 2,
+        "accepted": false,
+        "flags": [
+          "class_score_mapping_mismatch",
+          "label_score_conflict_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are normal=0.65 > glaucoma=0.2 > cataract=0.15; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.4054054054054054,
+        "ROUGE-2": 0.18461538461538457,
+        "ROUGE-L": 0.3783783783783784
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.997138199978508,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 66,
+        "total_duration_nanoseconds": 1953572200,
+        "total_duration_seconds": 1.9535722,
+        "load_duration_nanoseconds": 9542000,
+        "load_duration_seconds": 0.009542,
+        "prompt_eval_duration_nanoseconds": 384975000,
+        "prompt_eval_duration_seconds": 0.384975,
+        "eval_duration_nanoseconds": 1541114000,
+        "eval_duration_seconds": 1.541114
+      }
+    },
+    {
+      "case_id": "contra_04",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "normal",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.12
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.75
+          },
+          {
+            "class": "normal",
+            "score": 0.13
+          }
+        ],
+        "ranking": [
+          {
+            "class": "glaucoma",
+            "score": 0.75
+          },
+          {
+            "class": "normal",
+            "score": 0.13
+          },
+          {
+            "class": "cataract",
+            "score": 0.12
+          }
+        ],
+        "ranked_score_sequence": "glaucoma=0.75 > normal=0.13 > cataract=0.12",
+        "highest_scoring_classes": [
+          "glaucoma"
+        ],
+        "highest_score": 0.75,
+        "top_two_score_gap": 0.62,
+        "score_range": 0.63,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "label_score_conflict_missing"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is normal; the ranked scores are glaucoma=0.75 > normal=0.13 > cataract=0.12; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3529411764705882,
+        "ROUGE-2": 0.060606060606060615,
+        "ROUGE-L": 0.2647058823529412
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.0689748000586405,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 263,
+        "eval_count": 69,
+        "total_duration_nanoseconds": 2014233500,
+        "total_duration_seconds": 2.0142335,
+        "load_duration_nanoseconds": 12305100,
+        "load_duration_seconds": 0.0123051,
+        "prompt_eval_duration_nanoseconds": 381003000,
+        "prompt_eval_duration_seconds": 0.381003,
+        "eval_duration_nanoseconds": 1611611000,
+        "eval_duration_seconds": 1.611611
+      }
+    },
+    {
+      "case_id": "contra_05",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "cataract",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.2
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.15
+          },
+          {
+            "class": "normal",
+            "score": 0.65
+          }
+        ],
+        "ranking": [
+          {
+            "class": "normal",
+            "score": 0.65
+          },
+          {
+            "class": "cataract",
+            "score": 0.2
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.15
+          }
+        ],
+        "ranked_score_sequence": "normal=0.65 > cataract=0.2 > glaucoma=0.15",
+        "highest_scoring_classes": [
+          "normal"
+        ],
+        "highest_score": 0.65,
+        "top_two_score_gap": 0.45,
+        "score_range": 0.5,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 3,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is cataract; the ranked scores are normal=0.65 > cataract=0.2 > glaucoma=0.15; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.36363636363636365,
+        "ROUGE-2": 0.08,
+        "ROUGE-L": 0.23376623376623376
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 4.123558200080879,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 262,
+        "eval_count": 74,
+        "total_duration_nanoseconds": 2083686000,
+        "total_duration_seconds": 2.083686,
+        "load_duration_nanoseconds": 11245000,
+        "load_duration_seconds": 0.011245,
+        "prompt_eval_duration_nanoseconds": 339140000,
+        "prompt_eval_duration_seconds": 0.33914,
+        "eval_duration_nanoseconds": 1724941000,
+        "eval_duration_seconds": 1.724941
+      }
+    },
+    {
+      "case_id": "contra_06",
+      "status": "rejected_fallback",
+      "factual_summary": {
+        "class_index_mapping": {
+          "0": "cataract",
+          "1": "glaucoma",
+          "2": "normal"
+        },
+        "predicted_class": "glaucoma",
+        "scores": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranking": [
+          {
+            "class": "cataract",
+            "score": 0.7
+          },
+          {
+            "class": "glaucoma",
+            "score": 0.2
+          },
+          {
+            "class": "normal",
+            "score": 0.1
+          }
+        ],
+        "ranked_score_sequence": "cataract=0.7 > glaucoma=0.2 > normal=0.1",
+        "highest_scoring_classes": [
+          "cataract"
+        ],
+        "highest_score": 0.7,
+        "top_two_score_gap": 0.49999999999999994,
+        "score_range": 0.6,
+        "close_scores": false,
+        "near_even_distribution": false,
+        "label_score_conflict": true,
+        "score_context_statements": [
+          "The predicted label conflicts with the highest-scoring class."
+        ],
+        "label_score_statement": "The predicted label conflicts with the highest-scoring class.",
+        "limitations": [
+          "Scores are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities.",
+          "No image was inspected; no image findings or medical diagnosis can be established."
+        ]
+      },
+      "response_validation": {
+        "sentence_count": 4,
+        "accepted": false,
+        "flags": [
+          "sentence_count_not_two",
+          "class_score_mapping_mismatch"
+        ],
+        "unsupported_claim_flags": [],
+        "prohibited_score_descriptions": []
+      },
+      "presentation_source": "deterministic_fallback",
+      "display_text": "The supplied prediction is glaucoma; the ranked scores are cataract=0.7 > glaucoma=0.2 > normal=0.1; the label conflicts with the highest-scoring class. These are uncalibrated softmax outputs and must not be interpreted as calibrated probabilities; no image was inspected, so no image findings or medical diagnosis can be established.",
+      "raw_text_metrics": {
+        "ROUGE-1": 0.3880597014925373,
+        "ROUGE-2": 0.12307692307692308,
+        "ROUGE-L": 0.23880597014925373
+      },
+      "generation_metadata": {
+        "model": "medgemma1.5:4b",
+        "response_duration_seconds": 3.7676316000288352,
+        "generation_options": {
+          "temperature": 0.2,
+          "seed": 42,
+          "num_predict": 128
+        },
+        "prompt_eval_count": 260,
+        "eval_count": 58,
+        "total_duration_nanoseconds": 1725241800,
+        "total_duration_seconds": 1.7252418,
+        "load_duration_nanoseconds": 9405900,
+        "load_duration_seconds": 0.0094059,
+        "prompt_eval_duration_nanoseconds": 352929000,
+        "prompt_eval_duration_seconds": 0.352929,
+        "eval_duration_nanoseconds": 1353660000,
+        "eval_duration_seconds": 1.35366
+      }
+    },
+    {
+      "case_id": "invalid_01",
+      "status": "invalid_input",
+      "validation_error": "Scores must contain exactly the three configured classes."
+    },
+    {
+      "case_id": "invalid_02",
+      "status": "invalid_input",
+      "validation_error": "Predicted class must be cataract, glaucoma, or normal."
+    },
+    {
+      "case_id": "invalid_03",
+      "status": "invalid_input",
+      "validation_error": "Each class score must be a finite number from 0 to 1."
+    },
+    {
+      "case_id": "invalid_04",
+      "status": "invalid_input",
+      "validation_error": "Class order must be cataract, glaucoma, normal."
+    }
+  ],
+  "limitations": [
+    "All inputs and references are synthetic and are not clinically approved reports.",
+    "Text validation is lexical/structural and cannot establish semantic or medical correctness.",
+    "Rejected model text is retained for audit but is never used as the presented explanation.",
+    "Fallback text is deterministic and is not a model response or clinical advice.",
+    "BLEU and ROUGE measure text overlap, not clinical validity or safety.",
+    "No image is inspected; this workflow is not clinical validation."
+  ]
+}
