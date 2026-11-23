@@ -1,0 +1,384 @@
+{
+  "benchmark_name": "synthetic-eye-classifier-explanation",
+  "benchmark_version": "1.0",
+  "prompt_version": "structured-classifier-explanation-v4",
+  "system_prompt_sha256": "e8d711e8f7803947965a55a4d1b6dd6faac69b192ba6e4f1a4e96636d43bcbee",
+  "benchmark_case_count": 34,
+  "valid_case_count": 30,
+  "invalid_case_count": 4,
+  "completed_case_count": 3,
+  "pending_valid_case_count": 27,
+  "model": {
+    "model": "medgemma1.5:4b",
+    "digest": "433252621ab154668b5d8be6aff6c1b771bacba045e46e6193da8d6ad1630f2c"
+  },
+  "generation_options": {
+    "temperature": 0.2,
+    "seed": 42,
+    "num_predict": 128
+  },
+  "automatic_text_metrics": {
+    "bleu_corpus": {
+      "BLEU-1": 0.46715328467153283,
+      "BLEU-2": 0.2769418854762623,
+      "BLEU-3": 0.19152659153234688,
+      "BLEU-4": 0.12172627027941615
+    },
+    "rouge_macro_average": {
+      "ROUGE-1": 0.43022088353413657,
+      "ROUGE-2": 0.1081081081081081,
+      "ROUGE-L": 0.32429718875502006
+    },
+    "rouge_case_aggregation": "max F1 over references per case, then macro-average cases",
+    "bleu_method": "Corpus modified n-gram precision with multiple references, closest reference length, brevity penalty, exponential smoothing, and local Unicode word tokenization.",
+    "rouge_method": "ROUGE-1/2/L F1, maximum per case over references, then unweighted macro-average."
+  },
+  "generation_performance": {
+    "response_count": 3,
+    "mean_response_duration_seconds": 3.9653652666602284,
+    "median_response_duration_seconds": 3.9442451000213623,
+    "prompt_eval_count_sum": 1311,
+    "prompt_eval_count_mean": 437,
+    "eval_count_sum": 193,
+    "eval_count_mean": 64.33333333333333,
+    "prompt_eval_count_observations": 3,
+    "eval_count_observations": 3,
+    "ollama_durations_seconds": {
+      "total_duration": {
+        "observations": 3,
+        "mean": 1.9107892666666666
+      },
+      "load_duration": {
+        "observations": 3,
+        "mean": 0.008457433333333333
+      },
+      "prompt_eval_duration": {
+        "observations": 3,
+        "mean": 0.31720633333333337
+      },
+      "eval_duration": {
+        "observations": 3,
+        "mean": 1.5588863333333334
+      }
+    }
+  },
+  "human_review": {
+    "reviewed_case_count": 0,
+    "criterion_scores": {
+      "faithfulness": {
+        "review_count": 0,
+        "mean": null
+      },
+      "class_and_score_interpretation": {
+        "review_count": 0,
+        "mean": null
+      },
+      "unsupported_claims": {
+        "review_count": 0,
+        "mean": null
+      },
+      "uncertainty_and_limitations": {
+        "review_count": 0,
+        "mean": null
+      },
+      "clarity_and_readability": {
+        "review_count": 0,
+        "mean": null
+      },
+      "consistency": {
+        "review_count": 0,
+        "mean": null
+      }
+    },
+    "unsupported_claims_by_severity": null,
+    "critical_failures_by_type": null
+  },
+  "per_case": [
+    {
+      "case_id": "cat_dom_01",
+      "status": "completed",
+      "scenario": "dominant_cataract",
+      "equivalence_group": "cat_equiv_a",
+      "rouge": {
+        "ROUGE-1": 0.45783132530120485,
+        "ROUGE-2": 0.16216216216216214,
+        "ROUGE-L": 0.3614457831325301
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "eval_count": 70,
+        "eval_duration_nanoseconds": 1694253000,
+        "eval_duration_seconds": 1.694253,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 5576900,
+        "load_duration_seconds": 0.0055769,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 437,
+        "prompt_eval_duration_nanoseconds": 365719000,
+        "prompt_eval_duration_seconds": 0.365719,
+        "response_duration_seconds": 4.189423999981955,
+        "total_duration_nanoseconds": 2125108200,
+        "total_duration_seconds": 2.1251082
+      }
+    },
+    {
+      "case_id": "cat_dom_02",
+      "status": "completed",
+      "scenario": "dominant_cataract",
+      "equivalence_group": "cat_equiv_a",
+      "rouge": {
+        "ROUGE-1": 0.45783132530120485,
+        "ROUGE-2": 0.16216216216216214,
+        "ROUGE-L": 0.3614457831325301
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "eval_count": 70,
+        "eval_duration_nanoseconds": 1702637000,
+        "eval_duration_seconds": 1.702637,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 9174900,
+        "load_duration_seconds": 0.0091749,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 437,
+        "prompt_eval_duration_nanoseconds": 166699000,
+        "prompt_eval_duration_seconds": 0.166699,
+        "response_duration_seconds": 3.9442451000213623,
+        "total_duration_nanoseconds": 1887852200,
+        "total_duration_seconds": 1.8878522
+      }
+    },
+    {
+      "case_id": "cat_dom_03",
+      "status": "completed",
+      "scenario": "dominant_cataract",
+      "equivalence_group": null,
+      "rouge": {
+        "ROUGE-1": 0.375,
+        "ROUGE-2": 0.0,
+        "ROUGE-L": 0.25
+      },
+      "model": "medgemma1.5:4b",
+      "generation_metadata": {
+        "eval_count": 53,
+        "eval_duration_nanoseconds": 1279769000,
+        "eval_duration_seconds": 1.279769,
+        "generation_options": {
+          "num_predict": 128,
+          "seed": 42,
+          "temperature": 0.2
+        },
+        "load_duration_nanoseconds": 10620500,
+        "load_duration_seconds": 0.0106205,
+        "model": "medgemma1.5:4b",
+        "prompt_eval_count": 437,
+        "prompt_eval_duration_nanoseconds": 419201000,
+        "prompt_eval_duration_seconds": 0.419201,
+        "response_duration_seconds": 3.762426699977368,
+        "total_duration_nanoseconds": 1719407400,
+        "total_duration_seconds": 1.7194074
+      }
+    },
+    {
+      "case_id": "cat_dom_04",
+      "scenario": "dominant_cataract",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_dom_01",
+      "scenario": "dominant_glaucoma",
+      "equivalence_group": "glc_equiv_a",
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_dom_02",
+      "scenario": "dominant_glaucoma",
+      "equivalence_group": "glc_equiv_a",
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_dom_03",
+      "scenario": "dominant_glaucoma",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_dom_04",
+      "scenario": "dominant_glaucoma",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_dom_01",
+      "scenario": "dominant_normal",
+      "equivalence_group": "normal_equiv_a",
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_dom_02",
+      "scenario": "dominant_normal",
+      "equivalence_group": "normal_equiv_a",
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_dom_03",
+      "scenario": "dominant_normal",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_dom_04",
+      "scenario": "dominant_normal",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "cat_close_01",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "cat_close_02",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "cat_close_03",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_close_01",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_close_02",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "glc_close_03",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_close_01",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_close_02",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "norm_close_03",
+      "scenario": "close_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "dist_01",
+      "scenario": "distributed_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "dist_02",
+      "scenario": "distributed_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "dist_03",
+      "scenario": "distributed_scores",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_01",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_02",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_03",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_04",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_05",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "contra_06",
+      "scenario": "contradictory_label_and_ranking",
+      "equivalence_group": null,
+      "status": "pending"
+    },
+    {
+      "case_id": "invalid_01",
+      "scenario": "invalid_missing_score",
+      "status": "invalid_input",
+      "validation_error": "Scores must contain exactly the three configured classes."
+    },
+    {
+      "case_id": "invalid_02",
+      "scenario": "invalid_missing_prediction",
+      "status": "invalid_input",
+      "validation_error": "Predicted class must be cataract, glaucoma, or normal."
+    },
+    {
+      "case_id": "invalid_03",
+      "scenario": "invalid_non_numeric_score",
+      "status": "invalid_input",
+      "validation_error": "Each class score must be a finite number from 0 to 1."
+    },
+    {
+      "case_id": "invalid_04",
+      "scenario": "invalid_wrong_class_order",
+      "status": "invalid_input",
+      "validation_error": "Class order must be cataract, glaucoma, normal."
+    }
+  ],
+  "limitations": [
+    "Synthetic structured classifier outputs only; no image-to-report task.",
+    "Reference explanations are experimental and not clinically approved reports.",
+    "BLEU and ROUGE measure text overlap, not clinical correctness.",
+    "Human review is required for faithfulness and unsupported-claim assessment.",
+    "The LLM does not independently inspect images; this is not clinical validation."
+  ]
+}

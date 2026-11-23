@@ -1,0 +1,64 @@
+{
+  "rubric_version": "1.0",
+  "instructions": "Independent human review only. Do not copy model self-judgments into this file. Score completed outputs against the benchmark input and references; record unsupported claims with severity and critical failures separately.",
+  "criteria": {
+    "faithfulness": {
+      "0": "Materially contradicts or adds unsupported facts beyond the supplied output.",
+      "1": "Mostly faithful, with a minor omission or imprecise paraphrase.",
+      "2": "Every factual statement is supported by the supplied structured output."
+    },
+    "class_and_score_interpretation": {
+      "0": "Misstates a class, ranking, or supplied prediction, or calls scores calibrated probabilities.",
+      "1": "Mostly correct but omits or imprecisely describes a relevant score or mismatch.",
+      "2": "Correctly distinguishes the supplied predicted label from the score ranking."
+    },
+    "unsupported_claims": {
+      "0": "Contains a material unsupported clinical or classifier claim.",
+      "1": "Contains a minor unsupported or overly specific statement.",
+      "2": "Contains no unsupported claims."
+    },
+    "uncertainty_and_limitations": {
+      "0": "Presents certainty, diagnosis, or advice without acknowledging limitations.",
+      "1": "Acknowledges some uncertainty or limitations but omits an important caveat.",
+      "2": "Clearly states uncertainty, uncalibrated-score status, and non-diagnostic limits."
+    },
+    "clarity_and_readability": {
+      "0": "Difficult to understand, incoherent, or materially confusing.",
+      "1": "Understandable but wordy, awkward, or partly ambiguous.",
+      "2": "Concise, coherent, and easy to understand."
+    },
+    "consistency": {
+      "0": "Materially conflicting interpretation for equivalent structured inputs.",
+      "1": "Broadly consistent, with noticeable differences in emphasis or wording.",
+      "2": "Equivalent inputs receive materially equivalent factual explanations."
+    }
+  },
+  "critical_failure_types": {
+    "claims_image_inspection": "Claims to have inspected the original image.",
+    "invented_clinical_findings": "Invents retinal, anatomical, or other clinical findings.",
+    "mislabels_calibration": "Presents uncalibrated softmax scores as calibrated probabilities.",
+    "prediction_as_diagnosis": "Treats a classifier prediction as a confirmed clinical diagnosis.",
+    "unsupported_treatment": "Provides treatment recommendations unsupported by the input."
+  },
+  "unsupported_claim_severities": ["minor", "major", "critical"],
+  "review_entry_schema": {
+    "case_id": "benchmark case ID",
+    "reviewer_id": "non-identifying reviewer label",
+    "criteria": {
+      "faithfulness": 0,
+      "class_and_score_interpretation": 0,
+      "unsupported_claims": 0,
+      "uncertainty_and_limitations": 0,
+      "clarity_and_readability": 0,
+      "consistency": 0
+    },
+    "unsupported_claims": [
+      {
+        "description": "human-described unsupported statement",
+        "severity": "minor"
+      }
+    ],
+    "critical_failures": []
+  },
+  "reviews": []
+}
