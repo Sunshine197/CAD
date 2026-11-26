@@ -1,5 +1,6 @@
 import io
 import json
+import math
 import tempfile
 import unittest
 import urllib.error
@@ -45,7 +46,9 @@ class MockResponse(io.BytesIO):
 
 class LlmEvaluatorTests(unittest.TestCase):
     def test_benchmark_has_unique_cases_and_expected_scenario_coverage(self):
-        benchmark = load_benchmark(PROJECT_ROOT / "evaluation" / "llm_benchmark.json")
+        benchmark = load_benchmark(
+            PROJECT_ROOT / "evaluation" / "archive" / "llm_benchmark.json"
+        )
         cases = benchmark["cases"]
         self.assertEqual(len(cases), 34)
         self.assertEqual(sum(case["expected_valid"] for case in cases), 30)
@@ -127,6 +130,20 @@ class LlmEvaluatorTests(unittest.TestCase):
         )
         self.assertTrue(all(value is None for value in corpus_bleu([], []).values()))
         self.assertEqual(corpus_bleu(["short"], [["a longer reference sentence"]])["BLEU-4"], 0.0)
+
+    def test_bleu_cumulative_orders_smoothing_and_brevity_penalty(self):
+        scores = corpus_bleu(["a b x y"], [["a b c d"]])
+        self.assertAlmostEqual(scores["BLEU-1"], 0.5)
+        self.assertAlmostEqual(scores["BLEU-2"], math.sqrt(1 / 6))
+        self.assertAlmostEqual(scores["BLEU-3"], (1 / 24) ** (1 / 3))
+        self.assertAlmostEqual(scores["BLEU-4"], (1 / 96) ** 0.25)
+
+        short = corpus_bleu(["a b"], [["a b c"]])
+        self.assertAlmostEqual(short["BLEU-1"], math.exp(-0.5))
+
+    def test_bleu_clips_repeated_ngrams_to_maximum_reference_count(self):
+        scores = corpus_bleu(["a a a a"], [["a a", "a a a"]])
+        self.assertAlmostEqual(scores["BLEU-1"], 0.75)
 
     def test_rouge_uses_best_reference_and_returns_f1(self):
         hypothesis = "cataract ranks first but scores are uncertain"
@@ -225,7 +242,9 @@ class LlmEvaluatorTests(unittest.TestCase):
         self.assertEqual(summary["critical_failures_by_type"]["claims_image_inspection"], 1)
 
     def test_run_saves_resumable_raw_outputs_and_separate_results(self):
-        benchmark = load_benchmark(PROJECT_ROOT / "evaluation" / "llm_benchmark.json")
+        benchmark = load_benchmark(
+            PROJECT_ROOT / "evaluation" / "archive" / "llm_benchmark.json"
+        )
         data = {
             "name": benchmark["name"],
             "version": benchmark["version"],
@@ -304,7 +323,9 @@ class LlmEvaluatorTests(unittest.TestCase):
             self.assertIn("not clinically approved", benchmark["description"].lower())
 
     def test_run_stops_and_saves_progress_after_ollama_failure(self):
-        benchmark = load_benchmark(PROJECT_ROOT / "evaluation" / "llm_benchmark.json")
+        benchmark = load_benchmark(
+            PROJECT_ROOT / "evaluation" / "archive" / "llm_benchmark.json"
+        )
         data = {
             "name": benchmark["name"],
             "version": benchmark["version"],

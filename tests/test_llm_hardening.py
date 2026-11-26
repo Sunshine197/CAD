@@ -15,6 +15,7 @@ from src.llm_hardening import (
     load_benchmark,
     render_deterministic_fallback,
     run_hardened_evaluation,
+    validate_report_response,
     validate_hardened_response,
 )
 
@@ -32,6 +33,58 @@ def prediction(predicted_class="glaucoma", scores=None):
 
 
 class LlmHardeningTests(unittest.TestCase):
+    def test_ophthalmic_dataset_references_validate_without_rejecting_paraphrases(self):
+        dataset_path = PROJECT_ROOT / "medgemma_ophthalmic_eval_dataset.jsonl"
+        records = [
+            json.loads(line)
+            for line in dataset_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        self.assertEqual(len(records), 28)
+
+        for record in records:
+            cad_input = record["cad_input"]
+            summary = build_factual_summary(
+                {
+                    "predicted_class": cad_input["predicted_class"].casefold(),
+                    "scores": {
+                        class_name.casefold(): score
+                        for class_name, score in cad_input["scores"].items()
+                    },
+                    "class_order": ["cataract", "glaucoma", "normal"],
+                    "uncertainty_flag": cad_input["uncertainty_flag"],
+                }
+            )
+            validation = validate_report_response(
+                record["reference_report"], summary
+            )
+            with self.subTest(case_id=record["id"]):
+                self.assertTrue(validation["accepted"], validation["flags"])
+
+        diffuse_case = next(
+            record
+            for record in records
+            if record["id"] == "diffuse_uncertainty_04"
+        )
+        diffuse_input = diffuse_case["cad_input"]
+        diffuse_summary = build_factual_summary(
+            {
+                "predicted_class": diffuse_input["predicted_class"].casefold(),
+                "scores": {
+                    class_name.casefold(): score
+                    for class_name, score in diffuse_input["scores"].items()
+                },
+                "class_order": ["cataract", "glaucoma", "normal"],
+                "uncertainty_flag": diffuse_input["uncertainty_flag"],
+            }
+        )
+        incorrect_gap = diffuse_case["reference_report"].replace(
+            "margin between the leading score and both remaining categories is 0.01",
+            "margin between the leading score and both remaining categories is 0.02",
+        )
+        validation = validate_report_response(incorrect_gap, diffuse_summary)
+        self.assertIn("incorrect_score_gap", validation["flags"])
+
     def test_summary_orders_scores_and_preserves_ties_and_class_mapping(self):
         summary = build_factual_summary(prediction())
         self.assertEqual(CLASS_INDEX_MAPPING, {0: "cataract", 1: "glaucoma", 2: "normal"})
@@ -123,7 +176,9 @@ class LlmHardeningTests(unittest.TestCase):
                     build_factual_summary(value)
 
     def test_fallback_is_valid_for_every_synthetic_benchmark_case(self):
-        benchmark = load_benchmark(PROJECT_ROOT / "evaluation" / "llm_benchmark.json")
+        benchmark = load_benchmark(
+            PROJECT_ROOT / "evaluation" / "archive" / "llm_benchmark.json"
+        )
         for case in benchmark["cases"]:
             if not case["expected_valid"]:
                 continue
@@ -138,7 +193,12 @@ class LlmHardeningTests(unittest.TestCase):
         target_ids = {"glc_dom_03", "glc_close_03", "dist_01", "dist_03"}
         records = [
             json.loads(line)
-            for line in (PROJECT_ROOT / "evaluation" / "llm_raw_responses.jsonl")
+            for line in (
+                PROJECT_ROOT
+                / "evaluation"
+                / "archive"
+                / "llm_raw_responses.jsonl"
+            )
             .read_text(encoding="utf-8")
             .splitlines()
             if line.strip()
@@ -182,7 +242,12 @@ class LlmHardeningTests(unittest.TestCase):
         }
         records = [
             json.loads(line)
-            for line in (PROJECT_ROOT / "evaluation" / "llm_raw_responses.jsonl")
+            for line in (
+                PROJECT_ROOT
+                / "evaluation"
+                / "archive"
+                / "llm_raw_responses.jsonl"
+            )
             .read_text(encoding="utf-8")
             .splitlines()
             if line.strip()
@@ -278,6 +343,57 @@ class LlmHardeningTests(unittest.TestCase):
         validation = validate_hardened_response(response, summary)
         self.assertTrue(validation["accepted"], validation["flags"])
 
+    def test_score_gap_paraphrases_check_the_named_classes(self):
+        summary = build_factual_summary(
+            prediction(
+                "cataract",
+                {"cataract": 0.86, "normal": 0.10, "glaucoma": 0.04},
+            )
+        )
+        report = (
+            "**CAD Result:** The predicted classification is cataract.\n"
+            "**Score Interpretation:** Cataract (0.86) ranks above Normal (0.10) "
+            "and Glaucoma (0.04), and is significantly higher. The gap between "
+            "the highest-scoring class (Cataract) and the next highest-scoring "
+            "class (Normal) is 0.76; the gap between the highest-scoring class "
+            "(Cataract) and the lowest-scoring class (Glaucoma) is 0.82.\n"
+            "**Findings:** The structured classifier output supplies class scores "
+            "only and no direct retinal observations.\n"
+            "**Impression:** This is an algorithm-generated classification, not "
+            "a confirmed clinical diagnosis.\n"
+            "**Limitations:** The scores are uncalibrated softmax outputs and are "
+            "not calibrated probabilities. No image was inspected, so no image "
+            "findings or diagnosis can be established."
+        )
+        validation = validate_report_response(report, summary)
+        self.assertTrue(validation["accepted"], validation["flags"])
+
+        incorrect_pair_gap = report.replace(
+            "lowest-scoring class (Glaucoma) is 0.82",
+            "lowest-scoring class (Glaucoma) is 0.76",
+        )
+        invalid = validate_report_response(incorrect_pair_gap, summary)
+        self.assertIn("incorrect_score_gap", invalid["flags"])
+
+    def test_unqualified_probability_and_reasoning_leaks_are_flagged(self):
+        summary = build_factual_summary(prediction())
+        probability_claim = (
+            "The classifier output has a high probability of glaucoma.\n"
+            + render_deterministic_fallback(summary)
+        )
+        probability_validation = validate_report_response(
+            probability_claim, summary
+        )
+        self.assertIn(
+            "prohibited_score_description:probability",
+            probability_validation["flags"],
+        )
+        reasoning_leak = (
+            "<unused94> thought\n" + render_deterministic_fallback(summary)
+        )
+        reasoning_validation = validate_report_response(reasoning_leak, summary)
+        self.assertIn("analysis_or_reasoning_leak", reasoning_validation["flags"])
+
     def test_false_ranking_and_highest_score_claims_are_rejected(self):
         summary = build_factual_summary(
             prediction(
@@ -320,6 +436,9 @@ class LlmHardeningTests(unittest.TestCase):
             "eval_count": 20,
         }
         with patch(
+            "src.llm_hardening.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "test-digest"},
+        ), patch(
             "src.llm_hardening._request_json",
             return_value=(fake_response, 1.0),
         ) as request:
@@ -352,6 +471,9 @@ class LlmHardeningTests(unittest.TestCase):
             "eval_count": 30,
         }
         with patch(
+            "src.llm_hardening.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "test-digest"},
+        ), patch(
             "src.llm_hardening._request_json",
             return_value=(fake_response, 0.5),
         ):

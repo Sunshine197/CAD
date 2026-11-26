@@ -1,0 +1,260 @@
+{
+  "status": "blocked",
+  "blocker": "Local Ollama model discovery is unavailable; no model digest or generation response was produced.",
+  "benchmark_name": "synthetic-eye-classifier-explanation",
+  "benchmark_version": "ophthalmic-report-benchmark-v2",
+  "source_benchmark_version": "1.0",
+  "prompt_version": "medgemma-ophthalmic-report-v1",
+  "model": {
+    "model": "medgemma1.5:4b",
+    "digest": null
+  },
+  "generation_options": {
+    "temperature": 0.2,
+    "seed": 42,
+    "num_predict": 512
+  },
+  "think": false,
+  "benchmark_case_count": 34,
+  "valid_case_count": 30,
+  "invalid_case_count": 4,
+  "completed_case_count": 0,
+  "pending_valid_case_count": 30,
+  "response_validation": {
+    "response_count": 0,
+    "accepted_count": 0,
+    "rejected_count": 0,
+    "rejected_case_ids": [],
+    "first_attempt_accepted_count": 0,
+    "first_attempt_acceptance_rate": null,
+    "retry_attempt_count": 0,
+    "retry_response_count": 0,
+    "retry_accepted_count": 0,
+    "retry_request_failure_count": 0,
+    "retry_acceptance_rate": null,
+    "final_medgemma_acceptance_rate": null,
+    "final_rejection_rate": null,
+    "fallback_count": 0,
+    "fallback_rate": null,
+    "first_attempt_rejection_categories": {},
+    "retry_rejection_categories": {},
+    "final_rejection_categories": {},
+    "factual_consistency": {
+      "automated_check_pass_count": 0,
+      "evaluated_count": 0
+    },
+    "unsupported_claims": {
+      "flagged_case_count": 0,
+      "evaluated_count": 0
+    },
+    "safety_compliance": {
+      "automated_check_pass_count": 0,
+      "evaluated_count": 0
+    }
+  },
+  "reference_assessment": {
+    "suitable_for_text_similarity": false,
+    "reference_count": 60,
+    "references_with_all_sections": 0,
+    "independently_reviewed": false,
+    "reasons": [
+      "References do not consistently contain the five-section ophthalmic report structure.",
+      "References are not marked as independently reviewed for this reporting task."
+    ],
+    "method": "Corpus BLEU-1 through BLEU-4 uses clipped multi-reference n-gram counts, closest reference length (ties shorter), and exponential smoothing. ROUGE-1, ROUGE-2, and ROUGE-L use each case's maximum F1 across references, then macro-average cases."
+  },
+  "historical_rejection_analysis": {
+    "source_prompt_version": "python-factual-summary-v2",
+    "source_task": "two-sentence classifier explanation; not five-section report generation",
+    "response_count": 30,
+    "accepted_count": 4,
+    "rejected_count": 26,
+    "overlapping_rejection_flag_counts": {
+      "class_score_mapping_mismatch": 25,
+      "close_score_context_missing": 2,
+      "label_score_conflict_missing": 4,
+      "near_even_context_missing": 3,
+      "prohibited_score_description:likelihood": 3,
+      "sentence_count_not_two": 23
+    },
+    "class_score_mapping_reaudit": {
+      "flagged_raw_responses": 25,
+      "current_parser_audit": {
+        "all_three_score_associations_correct": 16,
+        "incorrect_explicit_associations": 2,
+        "no_explicit_score_associations": 3,
+        "partial_score_associations_correct": 4
+      }
+    },
+    "interpretation": "The historical exact two-sentence constraint and near-even wording check are not required by the current five-section prompt. The score-mapping audit distinguishes complete and partial correct associations from incorrect or absent associations. Explicitly incorrect score mappings and positive likelihood claims remain rejection-worthy."
+  },
+  "text_similarity_metrics": {
+    "status": "blocked_unsuitable_references",
+    "bleu": null,
+    "rouge": null,
+    "scored_case_count": 0,
+    "reason": [
+      "References do not consistently contain the five-section ophthalmic report structure.",
+      "References are not marked as independently reviewed for this reporting task."
+    ]
+  },
+  "performance": {
+    "mean_response_duration_seconds": null,
+    "mean_prompt_eval_count": null,
+    "mean_eval_count": null
+  },
+  "human_review": {
+    "status": "pending",
+    "reviewed_case_count": 0
+  },
+  "limitations": [
+    "All benchmark classifier inputs are synthetic.",
+    "The original image is never sent to or inspected by MedGemma.",
+    "Classifier scores are uncalibrated softmax outputs, not calibrated probabilities.",
+    "Automated text checks cannot establish semantic or medical correctness.",
+    "BLEU and ROUGE, when available, are text-similarity metrics and not evidence of clinical correctness.",
+    "This benchmark is not clinical validation or medical approval."
+  ],
+  "per_case": [
+    {
+      "case_id": "cat_dom_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_dom_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_dom_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_dom_04",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_dom_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_dom_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_dom_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_dom_04",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_dom_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_dom_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_dom_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_dom_04",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_close_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_close_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "cat_close_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_close_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_close_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "glc_close_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_close_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_close_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "norm_close_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "dist_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "dist_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "dist_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_01",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_02",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_03",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_04",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_05",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "contra_06",
+      "status": "not_generated"
+    },
+    {
+      "case_id": "invalid_01",
+      "status": "invalid_input",
+      "validation_error": "Scores must contain exactly the three configured classes."
+    },
+    {
+      "case_id": "invalid_02",
+      "status": "invalid_input",
+      "validation_error": "Predicted class must be cataract, glaucoma, or normal."
+    },
+    {
+      "case_id": "invalid_03",
+      "status": "invalid_input",
+      "validation_error": "Each class score must be a finite number from 0 to 1."
+    },
+    {
+      "case_id": "invalid_04",
+      "status": "invalid_input",
+      "validation_error": "Class order must be cataract, glaucoma, normal."
+    }
+  ]
+}

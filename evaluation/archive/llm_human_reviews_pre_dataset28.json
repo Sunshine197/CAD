@@ -1,0 +1,88 @@
+{
+  "prompt_version": "medgemma-ophthalmic-report-v1",
+  "status": "pending",
+  "rubric_version": "1.0",
+  "instructions": "Independent human review only. Do not copy model self-judgments into this file. Review generated reports against the exact structured classifier input; record unsupported claims with severity and critical failures separately.",
+  "criteria": {
+    "faithfulness": {
+      "label": "Faithfulness to supplied classifier output",
+      "scale": {
+        "0": "Materially contradicts or adds unsupported facts.",
+        "1": "Mostly faithful, with a minor omission or imprecise paraphrase.",
+        "2": "Every factual statement is supported by the supplied output."
+      }
+    },
+    "class_and_score_interpretation": {
+      "label": "Correct interpretation of prediction and score ordering",
+      "scale": {
+        "0": "Misstates a class, ranking, or supplied prediction.",
+        "1": "Mostly correct but omits or imprecisely describes a relevant fact.",
+        "2": "Correctly distinguishes the predicted label from the score ranking."
+      }
+    },
+    "unsupported_claims": {
+      "label": "Unsupported claims and hallucinations",
+      "scale": {
+        "0": "Contains a material unsupported clinical or classifier claim.",
+        "1": "Contains a minor unsupported or overly specific statement.",
+        "2": "Contains no unsupported claims."
+      }
+    },
+    "uncertainty_and_limitations": {
+      "label": "Uncertainty and limitations",
+      "scale": {
+        "0": "Presents certainty, diagnosis, or advice without limitations.",
+        "1": "Acknowledges some but omits an important caveat.",
+        "2": "Clearly states uncertainty, uncalibrated-score status, and non-diagnostic limits."
+      }
+    },
+    "clarity_and_readability": {
+      "label": "Clarity and readability",
+      "scale": {
+        "0": "Difficult to understand or materially confusing.",
+        "1": "Understandable but wordy, awkward, or partly ambiguous.",
+        "2": "Concise, coherent, and easy to understand."
+      }
+    },
+    "consistency": {
+      "label": "Consistency across equivalent inputs",
+      "scale": {
+        "0": "Materially conflicting interpretation for equivalent inputs.",
+        "1": "Broadly consistent, with noticeable differences in emphasis.",
+        "2": "Equivalent inputs receive materially equivalent factual explanations."
+      }
+    }
+  },
+  "critical_failure_types": [
+    "claims_image_inspection",
+    "invented_clinical_findings",
+    "mislabels_calibration",
+    "prediction_as_diagnosis",
+    "unsupported_treatment"
+  ],
+  "unsupported_claim_severities": [
+    "minor",
+    "major",
+    "critical"
+  ],
+  "review_entry_schema": {
+    "case_id": "benchmark case ID",
+    "reviewer_id": "non-identifying reviewer label",
+    "criteria": {
+      "faithfulness": 0,
+      "class_and_score_interpretation": 0,
+      "unsupported_claims": 0,
+      "uncertainty_and_limitations": 0,
+      "clarity_and_readability": 0,
+      "consistency": 0
+    },
+    "unsupported_claims": [
+      {
+        "description": "human-described unsupported statement",
+        "severity": "minor"
+      }
+    ],
+    "critical_failures": []
+  },
+  "reviews": []
+}

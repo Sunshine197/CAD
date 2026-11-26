@@ -19,11 +19,21 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_BENCHMARK_PATH = PROJECT_ROOT / "evaluation" / "llm_benchmark.json"
-DEFAULT_RAW_PATH = PROJECT_ROOT / "evaluation" / "llm_raw_responses.jsonl"
-DEFAULT_RESULTS_PATH = PROJECT_ROOT / "evaluation" / "llm_evaluation_results.json"
-DEFAULT_REPORT_PATH = PROJECT_ROOT / "evaluation" / "llm_evaluation_report.md"
-DEFAULT_REVIEWS_PATH = PROJECT_ROOT / "evaluation" / "llm_human_reviews.json"
+DEFAULT_BENCHMARK_PATH = (
+    PROJECT_ROOT / "evaluation" / "archive" / "llm_benchmark.json"
+)
+DEFAULT_RAW_PATH = (
+    PROJECT_ROOT / "evaluation" / "archive" / "llm_raw_responses.jsonl"
+)
+DEFAULT_RESULTS_PATH = (
+    PROJECT_ROOT / "evaluation" / "archive" / "llm_evaluation_results.json"
+)
+DEFAULT_REPORT_PATH = (
+    PROJECT_ROOT / "evaluation" / "archive" / "llm_evaluation_report.md"
+)
+DEFAULT_REVIEWS_PATH = (
+    PROJECT_ROOT / "evaluation" / "archive" / "llm_human_reviews.json"
+)
 
 CLASS_ORDER = ("cataract", "glaucoma", "normal")
 OLLAMA_BASE_URL = "http://localhost:11434"
@@ -951,7 +961,7 @@ def render_report(results: Mapping[str, Any]) -> str:
             "",
             "Counts are not reported until outputs have been independently reviewed; "
             "absence of ratings does not mean outputs were found safe. Use "
-            "`llm_human_reviews.json` to record "
+            "`evaluation/archive/llm_human_reviews.json` to record "
             "independent manual assessments.",
             "",
             "## Generation performance",
@@ -977,12 +987,13 @@ def render_report(results: Mapping[str, Any]) -> str:
             "",
             "Run `python -m src.llm_evaluator --limit 3` for a small pilot or "
             "`python -m src.llm_evaluator` for the full valid-case benchmark. Completed "
-            "responses are appended and flushed to `llm_raw_responses.jsonl`; matching "
+            "responses are appended and flushed to "
+            "`evaluation/archive/llm_raw_responses.jsonl`; matching "
             "case/model/digest/prompt/settings fingerprints are reused after interruption. "
             "The raw log retains earlier versioned prompt pilots, while this report includes "
             "only records matching its current prompt and settings. Malformed cases are "
             "validation-only and never sent to Ollama. Enter independent ratings separately "
-            "in `llm_human_reviews.json`.",
+            "in `evaluation/archive/llm_human_reviews.json`.",
             "",
             "## Per-case ROUGE",
             "",

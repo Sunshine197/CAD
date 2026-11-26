@@ -28,8 +28,17 @@ class FakePredictor:
 
 
 VALID_EXPLANATION = (
-    "The classifier's predicted label is glaucoma; this is a model output, "
-    "not a medical diagnosis."
+    "**CAD Result:** The classifier-generated class is glaucoma.\n"
+    "**Score Interpretation:** Glaucoma has a score of 0.6; cataract and "
+    "normal each have scores of 0.2. The leading classes are clearly "
+    "separated, with a top-two score gap of 0.4.\n"
+    "**Findings:** The structured output establishes the algorithmic class "
+    "and scores only; it does not establish retinal anatomy.\n"
+    "**Impression:** This is the glaucoma classification produced by the CAD "
+    "algorithm, not a confirmed clinical diagnosis.\n"
+    "**Limitations:** These are uncalibrated softmax scores, not calibrated "
+    "probabilities. No image was inspected, so no image findings or medical "
+    "diagnosis can be established."
 )
 
 
@@ -50,6 +59,7 @@ class InferenceServiceTests(unittest.TestCase):
             [item["class"] for item in result["classifier"]["ranking"]],
             ["glaucoma", "cataract", "normal"],
         )
+        self.assertEqual(len(result["classifier"]["score_gaps"]), 2)
         self.assertFalse(
             result["classifier"]["label_score_inconsistency"]["detected"]
         )
@@ -131,13 +141,26 @@ class InferenceServiceTests(unittest.TestCase):
                 self.assertEqual(
                     result["explanation"]["source"], "deterministic_fallback"
                 )
+                self.assertEqual(
+                    result["explanation"]["generation_source"],
+                    "not_generated",
+                )
+                self.assertEqual(
+                    result["explanation"]["presentation_source"],
+                    "deterministic_fallback",
+                )
                 self.assertFalse(result["explanation"]["llm_validated"])
                 self.assertNotIn(str(failure), json.dumps(result))
 
     def test_valid_llm_response_is_returned_after_validation(self):
         generated = {
             "model_response_text": VALID_EXPLANATION,
-            "metadata": {"model": "medgemma1.5:4b"},
+            "prompt_version": "medgemma-ophthalmic-report-v1",
+            "metadata": {
+                "model": "medgemma1.5:4b",
+                "model_digest": "test-digest",
+                "generation_options": {"num_predict": 512},
+            },
         }
         service = InferenceService(
             predictor=FakePredictor(),
@@ -147,6 +170,15 @@ class InferenceServiceTests(unittest.TestCase):
         self.assertEqual(result["explanation"]["source"], "medgemma")
         self.assertTrue(result["explanation"]["llm_validated"])
         self.assertEqual(result["explanation"]["text"], VALID_EXPLANATION)
+        self.assertEqual(result["explanation"]["model_response_text"], VALID_EXPLANATION)
+        self.assertEqual(result["explanation"]["model_digest"], "test-digest")
+        self.assertEqual(
+            result["explanation"]["generation_source"], "medgemma"
+        )
+        self.assertEqual(
+            result["explanation"]["presentation_source"], "medgemma"
+        )
+        self.assertTrue(result["explanation"]["validation_result"]["accepted"])
 
     def test_invalid_llm_response_uses_fallback(self):
         generated = {
@@ -160,7 +192,20 @@ class InferenceServiceTests(unittest.TestCase):
         self.assertEqual(
             result["explanation"]["source"], "deterministic_fallback"
         )
+        self.assertEqual(
+            result["explanation"]["generation_source"],
+            "medgemma",
+        )
+        self.assertEqual(
+            result["explanation"]["presentation_source"],
+            "deterministic_fallback",
+        )
         self.assertFalse(result["explanation"]["llm_validated"])
+        self.assertEqual(
+            result["explanation"]["model_response_text"],
+            "The image shows severe glaucoma; start treatment.",
+        )
+        self.assertFalse(result["explanation"]["validation_result"]["accepted"])
         self.assertNotIn("image shows", result["explanation"]["text"])
 
     def test_llm_can_be_disabled_and_json_result_is_serializable(self):
@@ -172,6 +217,11 @@ class InferenceServiceTests(unittest.TestCase):
         generator.assert_not_called()
         self.assertEqual(result["explanation"]["llm_status"], "disabled")
         self.assertIsNone(result["explanation"]["llm_validated"])
+        self.assertIsNone(result["explanation"]["model_response_text"])
+        self.assertEqual(
+            result["explanation"]["generation_source"],
+            "not_generated",
+        )
         self.assertIsInstance(json.dumps(result, allow_nan=False), str)
 
     def test_llm_disabled_by_default_setting_still_classifies(self):

@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Mapping, Optional, Protocol, Union
 
 from src.llm_brief import (
+    BRIEF_GENERATION_OPTIONS,
+    BRIEF_PROMPT_VERSION,
     generate_brief_explanation,
     render_brief_fallback,
     validate_brief_explanation,
 )
-from src.llm_evaluator import CLASS_ORDER, OllamaError
+from src.llm_evaluator import CLASS_ORDER, OLLAMA_MODEL, OllamaError
 from src.llm_hardening import build_factual_summary
 from src.predictor import (
     CheckpointNotFoundError,
@@ -143,6 +145,7 @@ class InferenceService:
             ),
             "highest_score": factual_summary["highest_score"],
             "top_two_score_gap": factual_summary["top_two_score_gap"],
+            "score_gaps": factual_summary["score_gaps"],
             "score_range": factual_summary["score_range"],
             "uncertainty": {
                 "close_scores": factual_summary["close_scores"],
@@ -166,9 +169,22 @@ class InferenceService:
                 {
                     "text": fallback,
                     "source": "deterministic_fallback",
+                    "generation_source": "not_generated",
+                    "presentation_source": "deterministic_fallback",
+                    "model_response_text": None,
+                    "prompt_version": BRIEF_PROMPT_VERSION,
+                    "model": OLLAMA_MODEL,
+                    "model_digest": None,
+                    "generation_settings": dict(BRIEF_GENERATION_OPTIONS),
                     "llm_validated": None,
                     "llm_status": "disabled",
+                    "validation_result": None,
                     "validation_flags": [],
+                    "attempts": [],
+                    "first_attempt_accepted": None,
+                    "retry_attempted": False,
+                    "retry_accepted": None,
+                    "retry_failed": False,
                 },
             )
 
@@ -182,9 +198,22 @@ class InferenceService:
                 {
                     "text": fallback,
                     "source": "deterministic_fallback",
+                    "generation_source": "not_generated",
+                    "presentation_source": "deterministic_fallback",
+                    "model_response_text": None,
+                    "prompt_version": BRIEF_PROMPT_VERSION,
+                    "model": OLLAMA_MODEL,
+                    "model_digest": None,
+                    "generation_settings": dict(BRIEF_GENERATION_OPTIONS),
                     "llm_validated": False,
                     "llm_status": "unavailable",
+                    "validation_result": None,
                     "validation_flags": ["ollama_unavailable"],
+                    "attempts": [],
+                    "first_attempt_accepted": None,
+                    "retry_attempted": False,
+                    "retry_accepted": None,
+                    "retry_failed": False,
                 },
             )
 
@@ -193,6 +222,7 @@ class InferenceService:
             model_text = ""
         validation = validate_brief_explanation(model_text, factual_summary)
         if validation["accepted"]:
+            metadata = generated.get("metadata", {})
             return _result(
                 "success",
                 None,
@@ -200,10 +230,29 @@ class InferenceService:
                 {
                     "text": model_text,
                     "source": "medgemma",
+                    "generation_source": "medgemma",
+                    "presentation_source": "medgemma",
+                    "model_response_text": model_text,
+                    "prompt_version": generated.get(
+                        "prompt_version", BRIEF_PROMPT_VERSION
+                    ),
+                    "model": metadata.get("model", OLLAMA_MODEL),
+                    "model_digest": metadata.get("model_digest"),
+                    "generation_settings": metadata.get(
+                        "generation_options", dict(BRIEF_GENERATION_OPTIONS)
+                    ),
                     "llm_validated": True,
                     "llm_status": "accepted",
+                    "validation_result": validation,
                     "validation_flags": [],
-                    "metadata": generated.get("metadata", {}),
+                    "metadata": metadata,
+                    "attempts": generated.get("attempts", []),
+                    "first_attempt_accepted": generated.get(
+                        "first_attempt_accepted", True
+                    ),
+                    "retry_attempted": generated.get("retry_attempted", False),
+                    "retry_accepted": generated.get("retry_accepted"),
+                    "retry_failed": generated.get("retry_error") is not None,
                 },
             )
 
@@ -214,8 +263,30 @@ class InferenceService:
             {
                 "text": fallback,
                 "source": "deterministic_fallback",
+                "generation_source": generated.get(
+                    "generation_source", "medgemma"
+                ),
+                "presentation_source": "deterministic_fallback",
+                "model_response_text": model_text,
+                "prompt_version": generated.get(
+                    "prompt_version", BRIEF_PROMPT_VERSION
+                ),
+                "model": generated.get("metadata", {}).get("model", OLLAMA_MODEL),
+                "model_digest": generated.get("metadata", {}).get("model_digest"),
+                "generation_settings": generated.get("metadata", {}).get(
+                    "generation_options", dict(BRIEF_GENERATION_OPTIONS)
+                ),
                 "llm_validated": False,
                 "llm_status": "rejected",
+                "validation_result": validation,
                 "validation_flags": validation["flags"],
+                "metadata": generated.get("metadata", {}),
+                "attempts": generated.get("attempts", []),
+                "first_attempt_accepted": generated.get(
+                    "first_attempt_accepted", False
+                ),
+                "retry_attempted": generated.get("retry_attempted", False),
+                "retry_accepted": generated.get("retry_accepted"),
+                "retry_failed": generated.get("retry_error") is not None,
             },
         )
