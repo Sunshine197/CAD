@@ -6,10 +6,11 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
 import json
+import re
 import statistics
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from src.llm_evaluator import (
     DEFAULT_BENCHMARK_PATH,
@@ -30,6 +31,8 @@ from src.llm_evaluator import (
     validate_classifier_input,
 )
 from src.llm_hardening import (
+    _ANALYSIS_LEAK,
+    _REPORT_HEADING,
     _extract_class_score_pairs,
     build_factual_summary,
     validate_report_response,
@@ -60,7 +63,7 @@ HISTORICAL_V2_RAW_PATH = (
 BRIEF_GENERATION_OPTIONS = {
     "temperature": GENERATION_OPTIONS["temperature"],
     "seed": GENERATION_OPTIONS["seed"],
-    "num_predict": 512,
+    "num_predict": 1024,
 }
 BRIEF_THINK = False
 _REPORT_USER_INSTRUCTION = (
@@ -69,6 +72,182 @@ _REPORT_USER_INSTRUCTION = (
     "Python-validated classifier output; its supplied values and flags are "
     "authoritative. No image is provided to you."
 )
+
+# ---------------------------------------------------------------------------
+# Categories that warrant a retry (structural, factual, safety failures).
+# Wording-only categories that are NOT in this set do not trigger a retry;
+# they indicate prompt-level issues better fixed outside the retry loop.
+# ---------------------------------------------------------------------------
+_RETRY_WORTHY_CATEGORIES = frozenset(
+    {
+        "report_structure_and_formatting",
+        "class_score_factuality",
+        "score_ranking_and_uncertainty",
+        "unsupported_clinical_or_anatomical_claims",
+        "limitations_and_safety",
+    }
+)
+# Flags that are considered wording-only: prohibited phrasing that the model
+# used but that does not reflect a factual or structural error. Retrying for
+# these alone rarely helps and tends to produce thought-trace contamination.
+_WORDING_ONLY_FLAGS = frozenset(
+    {
+        "prohibited_score_description:confidence",
+        "prohibited_score_description:likelihood",
+        "prohibited_score_description:probability",
+        "prohibited_score_description:calibrated_probabilities",
+    }
+)
+# Factual and safety flags represent hallucinations, incorrect numerical/class
+# claims, or unsupported contradictions.  These must always rank as more severe
+# than structural/informational omissions or wording-only issues.
+_SAFETY_OR_FACTUAL_FLAGS = frozenset(
+    {
+        "class_score_mapping_mismatch",
+        "unexpected_numeric_value",
+        "incorrect_score_gap",
+        "predicted_class_missing_or_changed",
+        "incorrect_score_ranking",
+        "incorrect_highest_score_claim",
+        "incorrect_lowest_score_claim",
+        "incorrect_score_comparison",
+        "unsupported_close_score_claim",
+        "unsupported_clear_separation_claim",
+        "unsupported_moderate_separation_claim",
+        "unsupported_near_even_claim",
+        "unsupported_label_score_conflict",
+        "unsupported_uncertainty_flag_claim",
+    }
+)
+
+
+def _is_safety_or_factual_flag(flag: str) -> bool:
+    """Return True if *flag* denotes a factual error or safety hallucination."""
+    return flag.startswith("unsupported_claim:") or flag in _SAFETY_OR_FACTUAL_FLAGS
+
+
+def _is_wording_only_failure(validation: Mapping[str, Any]) -> bool:
+    """Return True when every failing flag is a wording-only prohibited phrase.
+
+    A wording-only failure does not justify a retry: the structure, facts, and
+    safety constraints are all satisfied; only the choice of words differs.
+    """
+    flags = validation.get("flags", [])
+    if not flags:
+        return False
+    return all(flag in _WORDING_ONLY_FLAGS for flag in flags)
+
+
+def _strip_leading_thought_trace(raw_text: str) -> Tuple[str, str, bool]:
+    """Strip a leading thought trace only when a valid report follows.
+
+    Returns ``(raw_text, cleaned_text, was_stripped)``.  The raw text is never
+    modified.  Stripping occurs only when:
+    1. A ``CAD Result`` report heading exists with at least the remaining
+       ordered report sections (so an outline inside a truncated thought trace
+       is not mistaken for a real report), AND
+    2. The preamble before that heading matches ``_ANALYSIS_LEAK``, AND
+    3. The extracted report body does not itself contain ``_ANALYSIS_LEAK``.
+
+    If any condition is not met, the cleaned text equals the raw text.
+    """
+    headings = list(_REPORT_HEADING.finditer(raw_text))
+    if not headings:
+        return raw_text, raw_text, False
+
+    # Look for a CAD Result heading that begins a complete 5-section report
+    # (or at least is followed by Score Interpretation, Findings, Impression,
+    # Limitations in order).
+    expected_sections = (
+        "CAD Result",
+        "Score Interpretation",
+        "Findings",
+        "Impression",
+        "Limitations",
+    )
+    candidate_start: Optional[int] = None
+    for index, match in enumerate(headings):
+        if match.group(1) != "CAD Result":
+            continue
+        following = tuple(h.group(1) for h in headings[index : index + 5])
+        if following == expected_sections:
+            candidate_start = match.start()
+
+    if candidate_start is None:
+        return raw_text, raw_text, False
+
+    preamble = raw_text[:candidate_start]
+    if not preamble.strip() or not _ANALYSIS_LEAK.search(preamble):
+        return raw_text, raw_text, False
+
+    cleaned = raw_text[candidate_start:].lstrip()
+    if _ANALYSIS_LEAK.search(cleaned):
+        return raw_text, raw_text, False
+
+    return raw_text, cleaned, True
+
+
+def _select_best_attempt(
+    attempts: List[Mapping[str, Any]],
+) -> Mapping[str, Any]:
+    """Return the best attempt from a completed generation run.
+
+    Selection priority (highest to lowest):
+    1. The first attempt whose cleaned-text validation is ``accepted``.
+    2. Among rejected attempts, minimize the 5-tier severity tuple:
+       ``(truncated, leak, safety_or_factual, structural_or_omission, wording)``
+       where:
+       - ``truncated``: 1 if ``done_reason == "length"`` (checked at top level
+         and inside ``response_payload`` for backward compatibility).
+       - ``leak``: count of ``analysis_or_reasoning_leak`` flags.
+       - ``safety_or_factual``: count of unsupported clinical claims,
+         incorrect scores/rankings/comparisons/gaps, unexpected numbers,
+         changed/missing predicted class, or unsupported contradictions.
+       - ``structural_or_omission``: count of remaining non-wording flags
+         (missing sections, missing limitations, missing context).
+       - ``wording``: count of ``_WORDING_ONLY_FLAGS``.
+
+    On identical severity tuples, ``min()`` preserves input order and selects
+    the earlier attempt.  All attempts remain preserved in ``attempts``.
+    """
+    # Priority 1: first accepted attempt.
+    for attempt in attempts:
+        v = attempt.get("validation", {})
+        if v.get("accepted"):
+            return attempt
+
+    # Priority 2: best-failing attempt by tiered severity.
+    def _score(attempt: Mapping[str, Any]) -> Tuple[int, int, int, int, int]:
+        """Lower tuple = better attempt."""
+        v = attempt.get("validation", {})
+        flags = v.get("flags", [])
+        payload = attempt.get("response_payload")
+        payload_done = (
+            payload.get("done_reason") if isinstance(payload, Mapping) else None
+        )
+        done_reason = attempt.get("done_reason") or payload_done
+        truncated = int(done_reason == "length")
+        leak = sum(1 for f in flags if f == "analysis_or_reasoning_leak")
+        safety_or_factual = sum(
+            1 for f in flags if _is_safety_or_factual_flag(f)
+        )
+        wording = sum(1 for f in flags if f in _WORDING_ONLY_FLAGS)
+        structural_or_omission = sum(
+            1
+            for f in flags
+            if f != "analysis_or_reasoning_leak"
+            and not _is_safety_or_factual_flag(f)
+            and f not in _WORDING_ONLY_FLAGS
+        )
+        return (
+            truncated,
+            leak,
+            safety_or_factual,
+            structural_or_omission,
+            wording,
+        )
+
+    return min(attempts, key=_score)
 
 
 def validate_brief_explanation(
@@ -177,12 +356,24 @@ def _extract_chat_text(response: Mapping[str, Any]) -> str:
 
 
 def _retry_feedback(validation: Mapping[str, Any]) -> List[str]:
+    """Return per-category feedback strings for the retry prompt.
+
+    Only categories that represent genuine structural, factual, or safety
+    failures are included.  Wording-only failures (prohibited score
+    descriptions that do not reflect a factual error) are excluded because
+    they cannot be reliably resolved by a retry and tend to cause the model
+    to switch into chain-of-thought planning mode.
+    """
     categories = validation.get("categories", {})
-    return [
-        f"{category}: {', '.join(reasons)}"
-        for category, reasons in categories.items()
-        if reasons
-    ]
+    feedback = []
+    for category, reasons in categories.items():
+        if not reasons:
+            continue
+        # Skip categories whose flags are exclusively wording-only.
+        if all(flag in _WORDING_ONLY_FLAGS for flag in reasons):
+            continue
+        feedback.append(f"{category}: {', '.join(reasons)}")
+    return feedback
 
 
 def _reference_assessment(benchmark: Mapping[str, Any]) -> Dict[str, Any]:
@@ -358,6 +549,7 @@ def generate_brief_explanation(
     base_url: str = OLLAMA_BASE_URL,
     timeout: int = REQUEST_TIMEOUT_SECONDS,
     source_cad_input: Optional[Mapping[str, Any]] = None,
+    num_predict: Optional[int] = None,
 ) -> Dict[str, Any]:
     """Generate and validate a report from structured classifier output only."""
     clean_input = validate_classifier_input(dict(classifier_input))
@@ -425,21 +617,43 @@ def generate_brief_explanation(
             "python_calculated_facts": structured_output,
         }
     model_details = get_model_details(base_url, model)
+    generation_options = dict(BRIEF_GENERATION_OPTIONS)
+    if num_predict is not None:
+        if num_predict < 1:
+            raise ValueError("num_predict must be a positive integer.")
+        generation_options["num_predict"] = num_predict
     attempts = []
     response_metadata: Dict[str, Any] = {}
     retry_error = None
     retry_error_duration = 0.0
     retry_response_payload = None
     for attempt_number in range(1, BRIEF_RETRY_LIMIT + 2):
+        # Decide whether to retry: skip if the previous attempt either passed
+        # or failed only on wording (prohibited-phrase) issues.
+        if attempts:
+            prev_validation = attempts[-1]["validation"]
+            if prev_validation["accepted"]:
+                break
+            if _is_wording_only_failure(prev_validation):
+                # Wording-only failure — do not retry; it rarely helps and
+                # commonly causes thought-trace contamination on the retry.
+                break
         retry_feedback = (
             _retry_feedback(attempts[-1]["validation"])
+            if attempts
+            else None
+        )
+        # For the retry prompt, use the cleaned text (thought traces removed)
+        # so we do not echo planning content back into the next generation.
+        previous_response_text = (
+            attempts[-1].get("cleaned_response_text") or attempts[-1]["response_text"]
             if attempts
             else None
         )
         payload = {
             "model": model,
             "stream": False,
-            "options": dict(BRIEF_GENERATION_OPTIONS),
+            "options": dict(generation_options),
             "think": BRIEF_THINK,
             "messages": [
                 {"role": "system", "content": MEDGEMMA_SYSTEM_PROMPT},
@@ -448,7 +662,7 @@ def generate_brief_explanation(
                     "content": _structured_user_message(
                         structured_output,
                         retry_feedback,
-                        attempts[-1]["response_text"] if attempts else None,
+                        previous_response_text,
                     ),
                 },
             ],
@@ -460,7 +674,7 @@ def generate_brief_explanation(
             response, duration = _request_json(
                 f"{base_url.rstrip('/')}/api/chat", timeout, payload
             )
-            model_text = _extract_chat_text(response)
+            raw_model_text = _extract_chat_text(response)
         except OllamaError as error:
             if not attempts:
                 raise
@@ -468,11 +682,35 @@ def generate_brief_explanation(
             retry_error_duration = duration or time.perf_counter() - request_started
             retry_response_payload = response or None
             break
-        validation = validate_brief_explanation(model_text, factual_summary)
+
+        # Record done_reason and token usage from the response payload (Ollama fields).
+        done_reason: Optional[str] = response.get("done_reason")
+        if not isinstance(done_reason, str):
+            done_reason = None
+        prompt_eval_count = response.get("prompt_eval_count")
+        if isinstance(prompt_eval_count, bool) or not isinstance(prompt_eval_count, int):
+            prompt_eval_count = None
+        eval_count = response.get("eval_count")
+        if isinstance(eval_count, bool) or not isinstance(eval_count, int):
+            eval_count = None
+
+        # Strip a leading thought trace (e.g. <unused94> thought …) when a
+        # valid report follows it.  The raw text is always preserved.
+        raw_text, cleaned_text, trace_stripped = _strip_leading_thought_trace(
+            raw_model_text
+        )
+
+        # Validate the cleaned text; this is what will be presented if accepted.
+        validation = validate_brief_explanation(cleaned_text, factual_summary)
         attempts.append(
             {
                 "attempt_number": attempt_number,
-                "response_text": model_text,
+                "response_text": cleaned_text,       # validated / presentable text
+                "raw_response_text": raw_text,        # original, unmodified response
+                "thought_trace_stripped": trace_stripped,
+                "done_reason": done_reason,
+                "prompt_eval_count": prompt_eval_count,
+                "eval_count": eval_count,
                 "response_payload": response,
                 "validation": validation,
                 "duration_seconds": duration,
@@ -482,9 +720,16 @@ def generate_brief_explanation(
         if validation["accepted"]:
             break
 
-    model_text = attempts[-1]["response_text"]
-    validation = attempts[-1]["validation"]
+    # Select the best attempt: first accepted, or best-failing by flag severity.
+    best = _select_best_attempt(attempts)
+    model_text = best["response_text"]
+    validation = best["validation"]
     accepted = validation["accepted"]
+    # Determine which attempt index was selected for metadata.
+    best_attempt_number = best.get("attempt_number", 1)
+    if isinstance(best.get("response_payload"), dict):
+        response_metadata = best["response_payload"]
+
     fallback = None if accepted else render_brief_fallback(factual_summary)
     if fallback is not None and not validate_brief_explanation(
         fallback, factual_summary
@@ -507,7 +752,8 @@ def generate_brief_explanation(
         "attempt_count": len(attempts),
         "request_attempt_count": len(attempts) + int(retry_error is not None),
         "retry_request_error_duration_seconds": retry_error_duration,
-        "generation_options": dict(BRIEF_GENERATION_OPTIONS),
+        "selected_attempt_number": best_attempt_number,
+        "generation_options": dict(generation_options),
         "think": BRIEF_THINK,
         "generation_source": "medgemma",
     }
@@ -619,17 +865,34 @@ def _build_brief_results(
                     "response_text": record["model_response_text"],
                 }
             ]
-        attempt_validations = [
-            validate_brief_explanation(attempt["response_text"], summary)
+        # Re-validate every attempt using the current validator.  Prefer the
+        # cleaned text when available (thought traces already stripped at
+        # generation time); fall back to response_text.
+        revalidated_attempts = [
+            {
+                **attempt,
+                "validation": validate_brief_explanation(
+                    attempt.get("response_text", ""), summary
+                ),
+            }
             for attempt in attempts
             if isinstance(attempt, Mapping)
             and isinstance(attempt.get("response_text"), str)
         ]
-        if not attempt_validations:
-            attempt_validations = [
-                validate_brief_explanation(record["model_response_text"], summary)
+        if not revalidated_attempts:
+            revalidated_attempts = [
+                {
+                    "attempt_number": 1,
+                    "response_text": record["model_response_text"],
+                    "validation": validate_brief_explanation(
+                        record["model_response_text"], summary
+                    ),
+                }
             ]
-        validation = attempt_validations[-1]
+        attempt_validations = [a["validation"] for a in revalidated_attempts]
+        # Use the same best-attempt logic as the generation function.
+        best_attempt = _select_best_attempt(revalidated_attempts)
+        validation = best_attempt["validation"]
         accepted = validation["accepted"]
         first_accepted = attempt_validations[0]["accepted"]
         first_attempt_accepted_count += int(first_accepted)
@@ -681,7 +944,10 @@ def _build_brief_results(
             safety_compliance_pass_count += 1
         if accepted:
             accepted_count += 1
-            display_text = record["model_response_text"].strip()
+            # Use the best attempt's response text, not necessarily the last.
+            display_text = best_attempt.get(
+                "response_text", record["model_response_text"]
+            ).strip()
             source = "medgemma"
         else:
             rejected_ids.append(case["case_id"])

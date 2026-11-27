@@ -19,6 +19,7 @@ from src.llm_brief import (
     BRIEF_RETRY_LIMIT,
     BRIEF_THINK,
     BRIEF_VALIDATION_VERSION,
+    _select_best_attempt,
     generate_brief_explanation,
     render_brief_fallback,
     validate_brief_explanation,
@@ -404,6 +405,8 @@ def _build_ophthalmic_results(
                         "attempt_number", len(checked_attempts) + 1
                     ),
                     "response_text": response_text,
+                    "done_reason": attempt.get("done_reason"),
+                    "response_payload": attempt.get("response_payload"),
                     "validation": validation,
                     "generation_time_validation": attempt.get("validation"),
                     "duration_seconds": attempt.get("duration_seconds"),
@@ -453,10 +456,12 @@ def _build_ophthalmic_results(
         retry_accepted_count += int(
             retry_validation is not None and retry_validation["accepted"]
         )
-        final_validation = checked_attempts[-1]["validation"]
+        best_attempt = _select_best_attempt(checked_attempts)
+        selected_attempt_number = best_attempt["attempt_number"]
+        final_validation = best_attempt["validation"]
         accepted = final_validation["accepted"]
         if accepted:
-            accepted_text = checked_attempts[-1]["response_text"]
+            accepted_text = best_attempt["response_text"]
             final_report_text = accepted_text
             final_report_source = "medgemma"
             accepted_model_cases.append(
@@ -497,6 +502,7 @@ def _build_ophthalmic_results(
                 "cad_input": dataset_record["cad_input"],
                 "reference_report": dataset_record["reference_report"],
                 "attempts": checked_attempts,
+                "selected_attempt_number": selected_attempt_number,
                 "first_attempt_accepted": first_accepted,
                 "retry_attempted": retry_attempted,
                 "retry_accepted": (
@@ -507,7 +513,7 @@ def _build_ophthalmic_results(
                 "retry_error": record.get("retry_error"),
                 "response_validation": final_validation,
                 "quality_checks": quality,
-                "model_response_text": checked_attempts[-1]["response_text"],
+                "model_response_text": best_attempt["response_text"],
                 "final_report_text": final_report_text,
                 "final_report_source": final_report_source,
                 "fallback_used": not accepted,

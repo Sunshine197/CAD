@@ -13,6 +13,9 @@ from src.llm_brief import (
     BRIEF_RAW_PATH,
     BRIEF_RETRY_LIMIT,
     BRIEF_VALIDATION_VERSION,
+    _is_wording_only_failure,
+    _select_best_attempt,
+    _strip_leading_thought_trace,
     generate_brief_explanation,
     render_brief_fallback,
     run_brief_benchmark,
@@ -1087,6 +1090,568 @@ class BriefExplanationTests(unittest.TestCase):
         self.assertFalse(raw_exists)
         self.assertTrue(results_exists)
         self.assertTrue(report_exists)
+
+
+class PhaseOneRetryAndSelectionTests(unittest.TestCase):
+    """Tests for Phase 1: thought-trace stripping, retry logic, and attempt selection."""
+
+    # ------------------------------------------------------------------
+    # a) First attempt accepted, retry rejected — first attempt must win.
+    # ------------------------------------------------------------------
+    def test_first_attempt_accepted_retry_not_triggered(self):
+        """When the first attempt passes validation no retry should be issued."""
+        valid_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": valid_report()},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d1"},
+        ), patch(
+            "src.llm_brief._request_json", return_value=(valid_response, 0.3)
+        ) as request:
+            result = generate_brief_explanation(classifier_input())
+
+        # Only one HTTP request should have been made.
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(result["status"], "accepted")
+        self.assertTrue(result["first_attempt_accepted"])
+        self.assertFalse(result["retry_attempted"])
+        self.assertEqual(len(result["attempts"]), 1)
+        self.assertEqual(result["final_report_source"], "medgemma")
+        self.assertEqual(result["model_response_text"], valid_report())
+
+    # ------------------------------------------------------------------
+    # b) First attempt rejected (meaningful failure), retry accepted.
+    # ------------------------------------------------------------------
+    def test_first_attempt_rejected_on_factual_failure_retry_accepted(self):
+        """A factual failure on attempt 1 triggers a retry; retry wins if accepted."""
+        # First response: invented finding — genuine factual/safety failure.
+        bad_response = {
+            "model": "medgemma1.5:4b",
+            "message": {
+                "content": valid_report().replace(
+                    "does not establish retinal anatomy",
+                    "shows optic-disc cupping",
+                )
+            },
+            "done_reason": "stop",
+        }
+        good_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": alternate_valid_report()},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d2"},
+        ), patch(
+            "src.llm_brief._request_json",
+            side_effect=[(bad_response, 0.2), (good_response, 0.3)],
+        ) as request:
+            result = generate_brief_explanation(classifier_input())
+
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(result["status"], "accepted")
+        self.assertFalse(result["first_attempt_accepted"])
+        self.assertTrue(result["retry_attempted"])
+        self.assertTrue(result["retry_accepted"])
+        self.assertEqual(result["model_response_text"], alternate_valid_report())
+        self.assertEqual(result["metadata"]["selected_attempt_number"], 2)
+
+    # ------------------------------------------------------------------
+    # c) Both attempts rejected; first attempt is better (fewer severe flags).
+    # ------------------------------------------------------------------
+    def test_both_rejected_first_attempt_selected_when_better(self):
+        """When both fail, _select_best_attempt must return the first if it has
+        fewer severe flags and is not truncated, even though it is not the last."""
+        summary = build_factual_summary(classifier_input())
+
+        # Attempt 1: only a wording-only flag (soft failure).
+        wording_only_text = valid_report().replace(
+            "No image was inspected",
+            "It is likely that no image was inspected",
+        )
+        # Attempt 2: a genuine structural failure (sections missing).
+        structural_fail_text = "The classifier predicted glaucoma. No further information."
+
+        a1 = {
+            "attempt_number": 1,
+            "response_text": wording_only_text,
+            "done_reason": "stop",
+            "validation": validate_brief_explanation(wording_only_text, summary),
+        }
+        a2 = {
+            "attempt_number": 2,
+            "response_text": structural_fail_text,
+            "done_reason": "stop",
+            "validation": validate_brief_explanation(structural_fail_text, summary),
+        }
+        # Sanity-check our fixtures.
+        self.assertFalse(a1["validation"]["accepted"])
+        self.assertFalse(a2["validation"]["accepted"])
+
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 1)
+
+    # ------------------------------------------------------------------
+    # d) Both attempts rejected; retry attempt is better (fewer flags).
+    # ------------------------------------------------------------------
+    def test_both_rejected_retry_selected_when_better(self):
+        """When both fail but the retry has fewer and less severe flags it wins."""
+        summary = build_factual_summary(classifier_input())
+
+        # Attempt 1: structural failure — many severe flags.
+        structural_text = "The classifier predicted glaucoma. No further information."
+        # Attempt 2: only a wording-only prohibited-phrase flag.
+        wording_only_text = valid_report().replace(
+            "No image was inspected",
+            "It is likely that no image was inspected",
+        )
+
+        a1 = {
+            "attempt_number": 1,
+            "response_text": structural_text,
+            "done_reason": "stop",
+            "validation": validate_brief_explanation(structural_text, summary),
+        }
+        a2 = {
+            "attempt_number": 2,
+            "response_text": wording_only_text,
+            "done_reason": "stop",
+            "validation": validate_brief_explanation(wording_only_text, summary),
+        }
+        self.assertFalse(a1["validation"]["accepted"])
+        self.assertFalse(a2["validation"]["accepted"])
+
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 2)
+
+    # ------------------------------------------------------------------
+    # e) Thought trace followed by a valid report — trace is stripped.
+    # ------------------------------------------------------------------
+    def test_thought_trace_followed_by_valid_report_is_stripped(self):
+        """_strip_leading_thought_trace must remove the preamble and return the
+        clean report when a valid section heading follows the thought trace."""
+        preamble = (
+            "<unused94> thought\n"
+            "The user wants me to generate a report.\n"
+            "Constraint Checklist: 1. Interpret output? Yes.\n\n"
+        )
+        raw = preamble + valid_report()
+        raw_out, cleaned, was_stripped = _strip_leading_thought_trace(raw)
+
+        self.assertTrue(was_stripped)
+        self.assertEqual(raw_out, raw)              # raw is preserved unchanged
+        self.assertEqual(cleaned, valid_report())   # clean text starts at heading
+        # Validate the cleaned text — it should pass.
+        summary = build_factual_summary(classifier_input())
+        v = validate_brief_explanation(cleaned, summary)
+        self.assertTrue(v["accepted"], v["flags"])
+
+    # ------------------------------------------------------------------
+    # f) Truncated thought trace without a following report heading — no strip.
+    # ------------------------------------------------------------------
+    def test_truncated_thought_trace_without_report_heading_is_not_stripped(self):
+        """When no valid section heading follows the thought trace, do not strip,
+        because we cannot identify where the report would begin."""
+        truncated = (
+            "<unused94> thought\n"
+            "The user wants me to generate a report with five sections...\n"
+            "1. CAD Result: state predicted class\n"
+            "2. Score Interpretation: explain"
+            # The model was cut off before actually writing the report.
+        )
+        raw_out, cleaned, was_stripped = _strip_leading_thought_trace(truncated)
+
+        self.assertFalse(was_stripped)
+        self.assertEqual(raw_out, cleaned)   # both equal the original
+        self.assertEqual(cleaned, truncated)
+
+    # ------------------------------------------------------------------
+    # g) Wording-only validation failure does not trigger a retry.
+    # ------------------------------------------------------------------
+    def test_wording_only_failure_does_not_trigger_retry(self):
+        """A response that fails only on prohibited wording (probability/likelihood)
+        must NOT cause a second HTTP request to be issued."""
+        # Build a report that fails only on prohibited 'probability' wording.
+        wording_fail_text = valid_report().replace(
+            "No image was inspected, so no image findings or medical diagnosis "
+            "can be established.",
+            "The probability of glaucoma cannot be established from this output. "
+            "No image was inspected, so no image findings can be confirmed.",
+        )
+        summary = build_factual_summary(classifier_input())
+        v = validate_brief_explanation(wording_fail_text, summary)
+        # Verify our fixture actually fails only on wording.
+        self.assertFalse(v["accepted"])
+        self.assertTrue(_is_wording_only_failure(v), v["flags"])
+
+        response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": wording_fail_text},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d3"},
+        ), patch(
+            "src.llm_brief._request_json", return_value=(response, 0.2)
+        ) as request:
+            result = generate_brief_explanation(classifier_input())
+
+        # Only one request should have been made — no retry.
+        self.assertEqual(request.call_count, 1)
+        self.assertFalse(result["retry_attempted"])
+        self.assertEqual(result["status"], "rejected")
+
+    # ------------------------------------------------------------------
+    # h) Genuine factual or safety failure DOES trigger a retry.
+    # ------------------------------------------------------------------
+    def test_genuine_factual_failure_triggers_retry(self):
+        """Invented anatomical findings (a genuine safety failure) must trigger
+        a retry up to BRIEF_RETRY_LIMIT times."""
+        safety_fail_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "reveals optic-disc cupping",
+        )
+        summary = build_factual_summary(classifier_input())
+        v = validate_brief_explanation(safety_fail_text, summary)
+        self.assertFalse(v["accepted"])
+        # It must NOT be classified as wording-only.
+        self.assertFalse(_is_wording_only_failure(v))
+
+        bad_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": safety_fail_text},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d4"},
+        ), patch(
+            "src.llm_brief._request_json",
+            side_effect=[(bad_response, 0.2)] * (BRIEF_RETRY_LIMIT + 1),
+        ) as request:
+            result = generate_brief_explanation(classifier_input())
+
+        # Should have requested BRIEF_RETRY_LIMIT + 1 times (1 original + retries).
+        self.assertEqual(request.call_count, BRIEF_RETRY_LIMIT + 1)
+        self.assertTrue(result["retry_attempted"])
+        self.assertEqual(result["status"], "rejected")
+
+    # ------------------------------------------------------------------
+    # Phase 1 Completion Tests (a - i)
+    # ------------------------------------------------------------------
+
+    def test_factual_hallucination_loses_to_multiple_minor_omissions(self):
+        """a) A factual/safety hallucination (1 flag) must lose to an attempt
+        with multiple minor structural/omission flags (e.g., 2 omission flags)."""
+        summary = build_factual_summary(classifier_input())
+        # Attempt 1: 1 factual hallucination (invented clinical finding).
+        hallucination_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "reveals optic-disc cupping",
+        )
+        # Attempt 2: 2 minor omission flags (missing calibration & image limits),
+        # but zero factual/safety hallucinations.
+        omission_text = (
+            "**CAD Result:** The classifier-generated class is glaucoma.\n"
+            "**Score Interpretation:** Glaucoma has a score of 0.6, while "
+            "cataract (0.2) and normal (0.2) are tied below it. The scores rank "
+            "glaucoma above both, with a top-two score gap of 0.4; the leading "
+            "classes are clearly separated.\n"
+            "**Findings:** The structured output establishes the algorithmic class "
+            "and scores only.\n"
+            "**Impression:** This is the glaucoma classification produced by the CAD "
+            "algorithm, not a confirmed clinical diagnosis.\n"
+            "**Limitations:** This is an automated classification result."
+        )
+        v1 = validate_brief_explanation(hallucination_text, summary)
+        v2 = validate_brief_explanation(omission_text, summary)
+        self.assertEqual(v1["flags"], ["unsupported_claim:invented_clinical_finding"])
+        self.assertGreaterEqual(len(v2["flags"]), 2)
+        self.assertIn("calibration_limitation_missing", v2["flags"])
+        self.assertIn("image_inspection_limitation_missing", v2["flags"])
+
+        a1 = {"attempt_number": 1, "response_text": hallucination_text, "done_reason": "stop", "validation": v1}
+        a2 = {"attempt_number": 2, "response_text": omission_text, "done_reason": "stop", "validation": v2}
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 2)
+
+    def test_safety_failure_loses_to_wording_only_failure(self):
+        """b) A safety failure must always lose to a wording-only failure."""
+        summary = build_factual_summary(classifier_input())
+        safety_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "suggests immediate treatment",
+        )
+        wording_text = valid_report().replace(
+            "No image was inspected",
+            "It is likely that no image was inspected",
+        )
+        v1 = validate_brief_explanation(safety_text, summary)
+        v2 = validate_brief_explanation(wording_text, summary)
+        self.assertIn("unsupported_claim:treatment_advice", v1["flags"])
+        self.assertTrue(_is_wording_only_failure(v2))
+
+        a1 = {"attempt_number": 1, "response_text": safety_text, "done_reason": "stop", "validation": v1}
+        a2 = {"attempt_number": 2, "response_text": wording_text, "done_reason": "stop", "validation": v2}
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 2)
+
+    def test_identical_severity_tuples_select_earlier_attempt(self):
+        """c) When two rejected attempts have identical severity tuples, the earlier
+        attempt (Attempt 1) must be selected."""
+        summary = build_factual_summary(classifier_input())
+        text1 = valid_report().replace(
+            "No image was inspected",
+            "It is likely that no image was inspected",
+        )
+        text2 = alternate_valid_report().replace(
+            "The model did not inspect the image",
+            "The model did not inspect the image; glaucoma is likely",
+        )
+        v1 = validate_brief_explanation(text1, summary)
+        v2 = validate_brief_explanation(text2, summary)
+        self.assertEqual(v1["flags"], ["prohibited_score_description:likelihood"])
+        self.assertEqual(v2["flags"], ["prohibited_score_description:likelihood"])
+
+        a1 = {"attempt_number": 1, "response_text": text1, "done_reason": "stop", "validation": v1}
+        a2 = {"attempt_number": 2, "response_text": text2, "done_reason": "stop", "validation": v2}
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 1)
+
+    def test_legacy_done_reason_inside_response_payload_is_respected(self):
+        """d) Legacy records store done_reason only inside response_payload;
+        _select_best_attempt must still penalize truncated legacy attempts."""
+        summary = build_factual_summary(classifier_input())
+        # Both have the same wording-only flag, but Attempt 1 was truncated
+        # (recorded only in response_payload) while Attempt 2 stopped normally.
+        text = valid_report().replace(
+            "No image was inspected",
+            "It is likely that no image was inspected",
+        )
+        v = validate_brief_explanation(text, summary)
+        a1 = {
+            "attempt_number": 1,
+            "response_text": text,
+            "response_payload": {"done_reason": "length"},
+            "validation": v,
+        }
+        a2 = {
+            "attempt_number": 2,
+            "response_text": text,
+            "response_payload": {"done_reason": "stop"},
+            "validation": v,
+        }
+        selected = _select_best_attempt([a1, a2])
+        self.assertEqual(selected["attempt_number"], 2)
+
+    def test_offline_revalidation_selects_same_attempt_as_live_pipeline(self):
+        """e) Offline revalidation must select Attempt 1 when Attempt 1 passes
+        current validation and Attempt 2 fails (instead of checked_attempts[-1])."""
+        dataset = load_ophthalmic_eval_dataset()
+        case = dataset["cases"][0]
+        good_text = case["reference_report"]
+        bad_text = "<unused94> thought\nTruncated planning without report."
+        raw_record = {
+            "case_id": case["id"],
+            "case_type": case["case_type"],
+            "fingerprint": "stale-gen-fp",
+            "benchmark_version": "medgemma-ophthalmic-eval-dataset-v1",
+            "dataset_sha256": dataset["sha256"],
+            "prompt_version": BRIEF_PROMPT_VERSION,
+            "validation_version": "ophthalmic-report-validation-v2",
+            "model": "medgemma1.5:4b",
+            "model_digest": "digest",
+            "generation_options": dict(BRIEF_GENERATION_OPTIONS),
+            "think": False,
+            "cad_input": case["cad_input"],
+            "reference_report": case["reference_report"],
+            "disclaimer": case["disclaimer"],
+            "attempts": [
+                {
+                    "attempt_number": 1,
+                    "response_text": good_text,
+                    "response_payload": {"done_reason": "stop"},
+                    "validation": {"accepted": False, "flags": ["old_v2_flag"]},
+                    "duration_seconds": 0.2,
+                },
+                {
+                    "attempt_number": 2,
+                    "response_text": bad_text,
+                    "response_payload": {"done_reason": "length"},
+                    "validation": {"accepted": False, "flags": ["report_sections_missing_or_out_of_order"]},
+                    "duration_seconds": 0.3,
+                },
+            ],
+            "model_response_text": bad_text,
+            "first_attempt_accepted": False,
+            "retry_attempted": True,
+            "retry_accepted": False,
+        }
+        prior_results = {
+            "model": {"model": "medgemma1.5:4b", "digest": "digest"},
+            "validation_version": "ophthalmic-report-validation-v2",
+            "acceptance_and_rejection": {},
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            raw_path = root / "raw.jsonl"
+            results_path = root / "results.json"
+            report_path = root / "report.md"
+            raw_path.write_text(json.dumps(raw_record) + "\n", encoding="utf-8")
+            results_path.write_text(json.dumps(prior_results), encoding="utf-8")
+
+            revalidated = revalidate_saved_ophthalmic_run(
+                raw_path=raw_path,
+                results_path=results_path,
+                report_path=report_path,
+                require_complete=False,
+            )
+
+        self.assertEqual(
+            revalidated["acceptance_and_rejection"]["final_medgemma_acceptance_count"],
+            1,
+        )
+        self.assertEqual(
+            revalidated["acceptance_and_rejection"]["fallback_count"], 0
+        )
+        case_result = next(
+            item for item in revalidated["per_case"] if item["case_id"] == case["id"]
+        )
+        self.assertEqual(case_result["status"], "accepted")
+        self.assertEqual(case_result["selected_attempt_number"], 1)
+        self.assertEqual(case_result["model_response_text"], good_text)
+        self.assertEqual(case_result["final_report_text"], good_text)
+        self.assertEqual(case_result["final_report_source"], "medgemma")
+        self.assertTrue(case_result["response_validation"]["accepted"])
+
+    def test_all_attempts_rejected_triggers_deterministic_fallback(self):
+        """f) When all attempts fail validation, both live generation and offline
+        revalidation must fall back to the deterministic fallback."""
+        bad_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "shows retinal hemorrhages",
+        )
+        bad_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": bad_text},
+            "done_reason": "stop",
+            "prompt_eval_count": 100,
+            "eval_count": 200,
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d5"},
+        ), patch(
+            "src.llm_brief._request_json",
+            side_effect=[(bad_response, 0.1), (bad_response, 0.2)],
+        ):
+            result = generate_brief_explanation(classifier_input())
+
+        self.assertEqual(result["status"], "rejected")
+        self.assertTrue(result["fallback_used"])
+        self.assertEqual(result["final_report_source"], "deterministic_fallback")
+        self.assertEqual(result["display_text"], result["fallback_text"])
+        self.assertNotEqual(result["display_text"], result["model_response_text"])
+
+    def test_default_num_predict_is_1024_on_both_attempts(self):
+        """g) Both initial generation and retry must receive num_predict=1024."""
+        self.assertEqual(BRIEF_GENERATION_OPTIONS["num_predict"], 1024)
+        bad_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "shows optic-disc cupping",
+        )
+        bad_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": bad_text},
+            "done_reason": "stop",
+        }
+        good_response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": valid_report()},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d6"},
+        ), patch(
+            "src.llm_brief._request_json",
+            side_effect=[(bad_response, 0.1), (good_response, 0.2)],
+        ) as request:
+            generate_brief_explanation(classifier_input())
+
+        self.assertEqual(request.call_count, 2)
+        for call in request.call_args_list:
+            payload = call.args[2]
+            self.assertEqual(payload["options"]["num_predict"], 1024)
+
+    def test_custom_num_predict_override_is_passed_to_ollama(self):
+        """h) Passing num_predict=... overrides the default 1024 limit."""
+        response = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": valid_report()},
+            "done_reason": "stop",
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d7"},
+        ), patch(
+            "src.llm_brief._request_json", return_value=(response, 0.1)
+        ) as request:
+            result = generate_brief_explanation(classifier_input(), num_predict=1536)
+
+        payload = request.call_args.args[2]
+        self.assertEqual(payload["options"]["num_predict"], 1536)
+        self.assertEqual(result["metadata"]["generation_options"]["num_predict"], 1536)
+
+    def test_telemetry_recorded_for_every_attempt(self):
+        """i) prompt_eval_count, eval_count, done_reason, and raw_response_text
+        must be recorded for every attempt."""
+        bad_text = valid_report().replace(
+            "does not establish retinal anatomy",
+            "shows optic-disc cupping",
+        )
+        r1 = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": bad_text},
+            "done_reason": "stop",
+            "prompt_eval_count": 1100,
+            "eval_count": 250,
+        }
+        r2 = {
+            "model": "medgemma1.5:4b",
+            "message": {"content": "<unused94> thought\nPlan\n" + valid_report()},
+            "done_reason": "stop",
+            "prompt_eval_count": 1450,
+            "eval_count": 310,
+        }
+        with patch(
+            "src.llm_brief.get_model_details",
+            return_value={"model": "medgemma1.5:4b", "digest": "d8"},
+        ), patch(
+            "src.llm_brief._request_json",
+            side_effect=[(r1, 0.2), (r2, 0.3)],
+        ):
+            result = generate_brief_explanation(classifier_input())
+
+        self.assertEqual(len(result["attempts"]), 2)
+        att1, att2 = result["attempts"]
+        self.assertEqual(att1["prompt_eval_count"], 1100)
+        self.assertEqual(att1["eval_count"], 250)
+        self.assertEqual(att1["done_reason"], "stop")
+        self.assertEqual(att1["raw_response_text"], bad_text)
+        self.assertFalse(att1["thought_trace_stripped"])
+
+        self.assertEqual(att2["prompt_eval_count"], 1450)
+        self.assertEqual(att2["eval_count"], 310)
+        self.assertEqual(att2["done_reason"], "stop")
+        self.assertTrue(att2["thought_trace_stripped"])
+        self.assertEqual(att2["raw_response_text"], r2["message"]["content"])
+        self.assertEqual(att2["response_text"], valid_report())
 
 
 if __name__ == "__main__":
